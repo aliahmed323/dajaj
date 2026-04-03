@@ -25,10 +25,11 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 .revenue-val { font-weight: 900; font-size: 17px; color: #fff; }
 
 /* ─── Tabs ─── */
-.tabs { background: #fff; display: flex; box-shadow: 0 3px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; overflow-x: auto; white-space: nowrap; }
-.tab-btn { flex: 1; padding: 11px 10px; font-size: 12.5px; background: none; cursor: pointer; border: none; border-bottom: 3px solid transparent; font-family: inherit; transition: all 0.2s; color: #aaa; min-width: 80px; }
+.tabs { background: #fff; display: flex; box-shadow: 0 3px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn { flex: 1; padding: 11px 10px; font-size: 12px; background: none; cursor: pointer; border: none; border-bottom: 3px solid transparent; font-family: inherit; transition: all 0.2s; color: #aaa; min-width: 75px; }
 .tab-btn.active { color: #1e6b40; border-bottom-color: #1e6b40; font-weight: 800; }
-.tab-icon { display: block; font-size: 19px; margin-bottom: 1px; }
+.tab-icon { display: block; font-size: 18px; margin-bottom: 2px; }
 
 /* ─── Content & Cards ─── */
 .content { padding: 14px 13px; max-width: 520px; margin: 0 auto; }
@@ -36,14 +37,13 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 .card-lbl { font-size: 13px; font-weight: 700; color: #5a7a60; margin-bottom: 10px; }
 
 /* ─── Inputs ─── */
-.big-input { width: 100%; text-align: center; border: 2.5px solid #ddeee2; border-radius: 14px; padding: 13px 10px; font-size: 28px; font-weight: 900; outline: none; color: #1a2e20; background: #fafcfb; transition: all 0.2s; font-family: inherit; -moz-appearance: textfield; }
+.big-input { width: 100%; text-align: center; border: 2.5px solid #ddeee2; border-radius: 14px; padding: 13px 10px; font-size: 28px; font-weight: 900; outline: none; color: #1a2e20; background: #fafcfb; transition: all 0.2s; font-family: inherit; }
 .big-input:focus { border-color: #1e6b40; background: #f3fbf5; }
-.note-input { width: 100%; border: none; outline: none; font-size: 14px; color: #555; background: transparent; text-align: right; font-family: inherit; padding: 2px 0; }
+.note-input { width: 100%; border: none; outline: none; font-size: 14px; color: #555; background: #f9f9f9; text-align: right; font-family: inherit; padding: 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #eee;}
 
-/* ─── Fast Weighing Inputs (Native Number for speed) ─── */
-.fast-input { width: 100%; text-align: center; border: 2.5px solid #c0dfc9; border-radius: 12px; padding: 12px; font-size: 22px; font-weight: 800; outline: none; background: #fff; transition: 0.15s; font-family: inherit; -moz-appearance: textfield; }
+/* ─── Fast Weighing Inputs ─── */
+.fast-input { width: 100%; text-align: center; border: 2.5px solid #c0dfc9; border-radius: 12px; padding: 12px; font-size: 22px; font-weight: 800; outline: none; background: #fff; transition: 0.15s; font-family: inherit; }
 .fast-input:focus { border-color: #1e6b40; box-shadow: 0 0 0 3px rgba(30,107,64,0.1); }
-.fast-input::-webkit-inner-spin-button, .fast-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .dual-input-row { display: flex; gap: 8px; margin-top: 8px; }
 .dual-input-row .fast-input { font-size: 16px; background: #f9f9f9; border-color: #ddd; }
 
@@ -86,15 +86,15 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 .toast.show { opacity: 1; }
 
 /* ─── Weighing List ─── */
-.weighing-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; text-align: center; }
-.weighing-table th { background: #f0f5f1; color: #5a7a60; padding: 8px; font-weight: 800; }
-.weighing-table td { padding: 8px; border-bottom: 1px solid #f0f5f1; }
-.weighing-table tr:last-child td { border-bottom: none; }
+.weighing-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; text-align: center; }
+.weighing-table th { background: #f0f5f1; color: #5a7a60; padding: 8px 4px; font-weight: 800; }
+.weighing-table td { padding: 8px 4px; border-bottom: 1px solid #f0f5f1; }
+.btn-del-row { background: #ffebee; color: #c62828; border: none; border-radius: 6px; padding: 4px 6px; font-size: 12px; cursor: pointer; }
 .btn-w-add { width: 100%; padding: 14px; background: #2e9957; color: white; border: none; border-radius: 12px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; font-family: inherit; }
-.btn-w-add:active { transform: scale(0.98); }
 .btn-w-clear { width: 100%; padding: 10px; background: #fff3f3; color: #c62828; border: 1px solid #ffcdd2; border-radius: 10px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 8px; }
 .report-box { background: #fff; border: 2px dashed #2e9957; border-radius: 12px; padding: 16px; margin-top: 15px; text-align: right; line-height: 1.8; font-family: monospace; font-size: 14px; font-weight: 800; color: #111; display: none; }
-.btn-w-transfer { width: 100%; padding: 14px; background: #0056b3; color: white; border: none; border-radius: 12px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; font-family: inherit; display: none; }
+.btn-w-save { flex: 1; padding: 12px; background: #1e6b40; color: white; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: inherit; }
+.btn-w-transfer { flex: 1; padding: 12px; background: #0056b3; color: white; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; font-family: inherit; }
 
 /* ─── History & Settings ─── */
 .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f0f5f1; }
@@ -106,7 +106,8 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 .est-desc { color: #1976d2; font-size: 12px; line-height: 1.7; }
 .est-val { font-weight: 900; color: #0d47a1; font-size: 23px; margin-top: 6px; }
 .history-hdr { font-weight: 800; color: #333; font-size: 15px; margin-bottom: 12px; }
-.sale-card { background: #fff; border-radius: 18px; padding: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 10px; }
+.sale-card { background: #fff; border-radius: 18px; padding: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 10px; border-right: 4px solid #1e6b40; }
+.sale-card.list-card { border-right-color: #0056b3; }
 .sale-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 .sale-count { font-weight: 900; font-size: 17px; color: #1a2e20; }
 .sale-date { font-size: 11px; color: #bbb; margin-right: 8px; }
@@ -120,20 +121,9 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 .sale-cell.hi .sc-val { color: #1b6030; }
 .sc-lbl { font-size: 10px; color: #aaa; margin-top: 2px; }
 .sale-note { margin-top: 9px; font-size: 12px; color: #777; background: #f8f9fa; border-radius: 8px; padding: 5px 10px; }
-.confirm-del-box { text-align: center; padding: 4px 0; }
-.confirm-del-txt { color: #c62828; font-weight: 800; margin-bottom: 12px; font-size: 15px; }
-.confirm-row { display: flex; gap: 8px; }
-.btn-yes { flex: 1; padding: 12px; background: #c62828; color: #fff; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: inherit; }
-.btn-no  { flex: 1; padding: 12px; background: #eee; color: #444; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
 .empty-state { text-align: center; padding: 44px 20px; }
 .empty-icon { font-size: 54px; }
 .empty-txt { font-size: 15px; color: #bbb; margin-top: 10px; }
-.empty-sub { font-size: 12px; color: #ccc; margin-top: 5px; }
-.settings-desc { font-size: 12px; color: #aaa; line-height: 1.7; margin-bottom: 10px; }
-.locked-ok { text-align: center; color: #1b6030; font-weight: 800; font-size: 14px; margin-top: 10px; }
-.danger-zone { background: #fff3f3; border-radius: 18px; padding: 16px; border: 1.5px solid #ffcdd2; margin-bottom: 12px; }
-.danger-title { color: #c62828; font-weight: 900; font-size: 15px; margin-bottom: 12px; }
-.btn-danger { width: 100%; padding: 14px; background: #c62828; color: #fff; border: none; border-radius: 14px; font-weight: 900; font-size: 15px; cursor: pointer; font-family: inherit; }
 </style>
 </head>
 <body>
@@ -166,43 +156,47 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 </div>
 
 <div class="tabs">
-  <button class="tab-btn"        id="tab-weighing" onclick="window.switchTab('weighing')">
+  <button class="tab-btn active" id="tab-weighing" onclick="window.switchTab('weighing')">
     <span class="tab-icon">⚖️</span>الوزنات
   </button>
-  <button class="tab-btn active" id="tab-entry"   onclick="window.switchTab('entry')">
-    <span class="tab-icon">➕</span>إدخال
+  <button class="tab-btn" id="tab-saved-lists" onclick="window.switchTab('saved-lists')">
+    <span class="tab-icon">🧾</span>القوائم
   </button>
-  <button class="tab-btn"        id="tab-history" onclick="window.switchTab('history')">
+  <button class="tab-btn" id="tab-entry" onclick="window.switchTab('entry')">
+    <span class="tab-icon">➕</span>مبيعات
+  </button>
+  <button class="tab-btn" id="tab-history" onclick="window.switchTab('history')">
     <span class="tab-icon">📋</span>السجل
   </button>
-  <button class="tab-btn"        id="tab-settings"onclick="window.switchTab('settings')">
-    <span class="tab-icon">⚙️</span>الإعدادات
+  <button class="tab-btn" id="tab-settings" onclick="window.switchTab('settings')">
+    <span class="tab-icon">⚙️</span>إعدادات
   </button>
 </div>
 
 <div class="content">
 
-  <div id="panel-weighing" style="display:none">
+  <div id="panel-weighing">
     
     <div class="card" style="background: #e4f5e9; border: 1px solid #c0dfc9;">
       <div class="card-lbl">📦 إعداد التعبئة</div>
-      <input class="fast-input" type="number" inputmode="numeric" id="w-chickens-per-cage"
-             placeholder="عدد الدجاج في القفص الواحد (مثال: 11)" value="11">
+      <input class="fast-input" type="number" id="w-chickens-per-cage" placeholder="عدد الدجاج في القفص (مثال: 11)" value="11">
     </div>
 
     <div class="card">
       <div class="card-lbl">⚡ إدخال الوزنات</div>
       <div style="font-size:11px; color:#888; margin-bottom:8px;">أدخل الوزن المملوء واضغط إدخال (أو Enter). سيتم توريث الباقي تلقائياً.</div>
       
-      <input class="fast-input" type="number" inputmode="decimal" id="w-full"
-             placeholder="الوزن المملوء (كغم)" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
+      <input class="fast-input" type="number" inputmode="decimal" id="w-full" placeholder="الوزن المملوء (كغم)" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
       
       <div class="dual-input-row">
-        <input class="fast-input" type="number" inputmode="numeric" id="w-cages"
-               placeholder="الأقفاص (يورث تلقائياً)" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
-        <input class="fast-input" type="number" inputmode="decimal" id="w-empty"
-               placeholder="الفارغ (يورث تلقائياً)" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
+        <div style="width: 100%;">
+          <input class="fast-input" type="number" inputmode="numeric" id="w-cages" placeholder="عدد الأقفاص" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
+        </div>
+        <div style="width: 100%;">
+          <input class="fast-input" type="number" inputmode="decimal" id="w-empty" placeholder="الوزن الفارغ" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
+        </div>
       </div>
+      <div style="font-size: 11px; color: #a67c00; text-align: center; margin-top: 6px;">سيتم حفظ الأقفاص والفارغ وتكرارها تلقائياً للوزنات القادمة</div>
       
       <button class="btn-w-add" onclick="window.addWeightEntry()">أضف الوزنة ➕</button>
     </div>
@@ -210,85 +204,56 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     <div class="card">
       <div class="card-lbl" style="display:flex; justify-content:space-between; align-items:center;">
         <span>📋 الوزنات المسجلة (<span id="w-count">0</span>)</span>
-        <button onclick="window.finalizeWeights()" style="background:#1e6b40; color:white; border:none; padding:5px 12px; border-radius:8px; cursor:pointer; font-family:inherit; font-weight:800;">تصفية 🧾</button>
+        <button onclick="window.finalizeWeights()" style="background:#1e6b40; color:white; border:none; padding:5px 12px; border-radius:8px; cursor:pointer; font-weight:800;">تصفية 🧾</button>
       </div>
       
       <table class="weighing-table">
         <thead>
           <tr>
-            <th>#</th><th>مملوء</th><th>أقفاص</th><th>فارغ</th><th>صافي</th>
+            <th>#</th><th>مملوء</th><th>أقفاص</th><th>فارغ</th><th>صافي</th><th>⚙️</th>
           </tr>
         </thead>
         <tbody id="w-tbody">
-          <tr><td colspan="5" style="color:#aaa;">لم يتم إضافة وزنات بعد</td></tr>
+          <tr><td colspan="6" style="color:#aaa;">لم يتم إضافة وزنات بعد</td></tr>
         </tbody>
       </table>
       <button class="btn-w-clear" onclick="window.clearWeights()">مسح القائمة للبدء من جديد 🗑️</button>
 
-      <div id="w-report" class="report-box"></div>
-      <button id="btn-w-transfer" class="btn-w-transfer" onclick="window.transferToMainEntry()">تسجيل هذه القائمة كبيعة 💾</button>
-    </div>
+      <div id="w-report-container" style="display: none;">
+        <div id="w-report" class="report-box"></div>
+        
+        <div style="margin-top: 12px;">
+          <input class="note-input" type="text" id="w-buyer" placeholder="👤 اسم المشتري (مثال: أبو محمد)...">
+          <input class="note-input" type="text" id="w-notes" placeholder="📝 ملاحظات إضافية...">
+        </div>
 
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <button class="btn-w-save" onclick="window.saveWeighingListOnly()">حفظ كقائمة 💾</button>
+          <button class="btn-w-transfer" onclick="window.transferToMainEntry()">ترحيل للمبيعات 💸</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div id="panel-entry">
+  <div id="panel-saved-lists" style="display:none">
+    <div class="history-hdr">🧾 قوائم القبان المحفوظة</div>
+    <div style="font-size: 12px; color: #777; margin-bottom: 10px;">هذه القوائم محفوظة بشكل مستقل ولا تؤثر على الإيرادات أو أعداد القطيع الكلي.</div>
+    <div id="saved-lists-container"></div>
+  </div>
+
+  <div id="panel-entry" style="display:none">
     <div id="edit-banner" class="edit-banner" style="display:none">
       <span class="edit-banner-txt">✏️ وضع التعديل</span>
       <button class="edit-cancel" onclick="window.resetForm()">إلغاء ×</button>
     </div>
-
-    <div class="card">
-      <div class="card-lbl">🐔 عدد الطيور</div>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-count" placeholder="مثال: 450" oninput="window.handleTyping(this, false, null)">
-    </div>
-
-    <div class="card">
-      <div class="card-lbl">💰 السعر (دينار عراقي / كغ)</div>
-      <button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">🔒 السعر المقفّل — اضغط للاستخدام</button>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-pr" placeholder="مثال: 5,500" oninput="window.handleTyping(this, false, null)">
-      <div class="price-hint" id="price-hint"></div>
-    </div>
-
-    <div class="card" style="background: #fffdf2; border: 1.5px solid #ffecb3;">
-      <div class="card-lbl" style="color: #d4a000;">💵 المبلغ الإجمالي (دينار)</div>
-      <input class="big-input" style="background: #fffcf2; border-color: #ffe082;" type="text" inputmode="numeric" id="inp-total-amt" placeholder="مثال: 4,500,000" oninput="window.handleTyping(this, false, 'amt')">
-      <div style="font-size: 11px; color: #a67c00; text-align: center; margin-top: 6px;">يمكنك كتابة المبلغ هنا وسنستنتج الوزن تلقائياً</div>
-    </div>
-
-    <div class="card" style="background: #f2f9ff; border: 1.5px solid #b3d4ff;">
-      <div class="card-lbl" style="color: #0056b3;">⚖️ الوزن الكلي (كغ)</div>
-      <input class="big-input" style="background: #f2f9ff; border-color: #99c2ff;" type="text" inputmode="decimal" id="inp-total-wt" placeholder="مثال: 150" oninput="window.handleTyping(this, true, 'totWt')">
-      <div style="font-size: 11px; color: #004085; text-align: center; margin-top: 6px;">أو اكتب الوزن الكلي هنا وسنستنتج الباقي</div>
-    </div>
-
-    <div class="card">
-      <div class="card-lbl">🐥 متوسط وزن الطير الواحد (كغ)</div>
-      <div class="wt-grid" id="wt-grid"></div>
-      <input class="big-input" type="text" inputmode="decimal" id="inp-wt" placeholder="وزن الطير..." oninput="window.handleTyping(this, true, 'avg')">
-    </div>
-
-    <div class="card" style="padding:11px 16px">
-      <input class="note-input" type="text" id="inp-note" placeholder="📝 ملاحظة اختيارية — مثال: باع أبو أحمد، دفعة المساء...">
-    </div>
-
-    <div class="result-panel" id="result-panel" style="display:none">
-      <div class="result-formula" id="r-formula"></div>
-      <div class="result-grid">
-        <div class="result-item n">
-          <div class="result-val" id="r-wt"></div>
-          <div class="result-lbl">الوزن الكلي المحتسب</div>
-        </div>
-        <div class="result-item g">
-          <div class="result-val" id="r-amt"></div>
-          <div class="result-lbl">المبلغ الإجمالي المحتسب</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="btn-row">
-      <button class="btn-save" id="btn-save" onclick="window.doSave()" disabled>💾 حفظ العملية</button>
-      <button class="btn-reset" onclick="window.resetForm()">🔄</button>
-    </div>
+    <div class="card"><div class="card-lbl">🐔 عدد الطيور</div><input class="big-input" type="text" inputmode="numeric" id="inp-count" oninput="window.handleTyping(this, false, null)"></div>
+    <div class="card"><div class="card-lbl">💰 السعر (دينار عراقي / كغ)</div><button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">🔒 السعر المقفّل</button><input class="big-input" type="text" inputmode="numeric" id="inp-pr" oninput="window.handleTyping(this, false, null)"><div class="price-hint" id="price-hint"></div></div>
+    <div class="card" style="background: #fffdf2; border: 1.5px solid #ffecb3;"><div class="card-lbl" style="color: #d4a000;">💵 المبلغ الإجمالي (دينار)</div><input class="big-input" style="background: #fffcf2; border-color: #ffe082;" type="text" inputmode="numeric" id="inp-total-amt" oninput="window.handleTyping(this, false, 'amt')"></div>
+    <div class="card" style="background: #f2f9ff; border: 1.5px solid #b3d4ff;"><div class="card-lbl" style="color: #0056b3;">⚖️ الوزن الكلي (كغ)</div><input class="big-input" style="background: #f2f9ff; border-color: #99c2ff;" type="text" inputmode="decimal" id="inp-total-wt" oninput="window.handleTyping(this, true, 'totWt')"></div>
+    <div class="card"><div class="card-lbl">🐥 متوسط وزن الطير الواحد (كغ)</div><div class="wt-grid" id="wt-grid"></div><input class="big-input" type="text" inputmode="decimal" id="inp-wt" oninput="window.handleTyping(this, true, 'avg')"></div>
+    <div class="card" style="padding:11px 16px"><input class="note-input" type="text" id="inp-note" placeholder="📝 ملاحظة للبيعة..."></div>
+    <div class="result-panel" id="result-panel" style="display:none"><div class="result-formula" id="r-formula"></div><div class="result-grid"><div class="result-item n"><div class="result-val" id="r-wt"></div><div class="result-lbl">الوزن المحتسب</div></div><div class="result-item g"><div class="result-val" id="r-amt"></div><div class="result-lbl">المبلغ المحتسب</div></div></div></div>
+    <div class="btn-row"><button class="btn-save" id="btn-save" onclick="window.doSave()" disabled>💾 حفظ العملية</button><button class="btn-reset" onclick="window.resetForm()">🔄</button></div>
   </div>
 
   <div id="panel-history" style="display:none">
@@ -299,27 +264,14 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
       <div class="summary-row"><span class="sum-lbl">المتبقي في المزرعة</span><span class="sum-val" id="s-remaining" style="color:#1b6030"></span></div>
       <div class="summary-row"><span class="sum-lbl">إجمالي الإيراد المسجّل</span><span class="sum-val" id="s-revenue" style="color:#1565c0"></span></div>
     </div>
-    <div class="estimator" id="estimator" style="display:none">
-      <div class="est-title">🔮 تقدير قيمة المتبقي عند السعر المقفّل</div><div class="est-desc" id="est-desc"></div><div class="est-val" id="est-val"></div>
-    </div>
-    <div class="history-hdr" id="history-hdr"></div>
+    <div class="history-hdr" id="history-hdr">عمليات البيع المؤكدة</div>
     <div id="sales-list"></div>
   </div>
 
   <div id="panel-settings" style="display:none">
-    <div class="card">
-      <div class="card-lbl">🐔 إعداد القطيع</div>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-flock" oninput="window.saveFlock(this.value); window.handleTyping(this, false, null)">
-    </div>
-    <div class="card">
-      <div class="card-lbl">🔒 تقفيل السعر الافتراضي</div>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-locked" placeholder="أدخل السعر د.ع/كغ..." oninput="window.saveLockedPrice(this.value); window.handleTyping(this, false, null)">
-      <div class="locked-ok" id="locked-ok" style="display:none"></div>
-    </div>
-    <div class="danger-zone">
-      <div class="danger-title">⚠️ منطقة الخطر</div>
-      <button class="btn-danger" onclick="window.clearAll()">🗑️ حذف جميع سجلات البيع</button>
-    </div>
+    <div class="card"><div class="card-lbl">🐔 إعداد القطيع</div><input class="big-input" type="text" inputmode="numeric" id="inp-flock" oninput="window.saveFlock(this.value); window.handleTyping(this, false, null)"></div>
+    <div class="card"><div class="card-lbl">🔒 تقفيل السعر الافتراضي</div><input class="big-input" type="text" inputmode="numeric" id="inp-locked" oninput="window.saveLockedPrice(this.value); window.handleTyping(this, false, null)"><div class="locked-ok" id="locked-ok" style="display:none"></div></div>
+    <div class="danger-zone"><div class="danger-title">⚠️ منطقة الخطر</div><button class="btn-danger" onclick="window.clearAllSales()">🗑️ حذف جميع المبيعات والقوائم</button></div>
   </div>
 </div>
 
@@ -345,13 +297,14 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   const WEIGHTS = [1.3, 1.5, 1.8, 2.0, 2.5, 3.0];
   let flock   = { initial: 17000 };
   let sales   = [];
+  let weighingListsDB = []; // لتخزين القوائم المستقلة
   let cfg     = { lockedPrice: '' };
   let editId  = null;
   let confirmDelId = null;
   let selWt   = '';
   let lastInputMode = 'avg'; 
 
-  // متغيرات قبان التحميل (الذاكرة المؤقتة)
+  // متغيرات قبان التحميل
   let wList = [];
   let wLastCages = '';
   let wLastEmpty = '';
@@ -363,11 +316,12 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     if (data) {
       flock = data.flock || { initial: 17000 };
       sales = data.sales || [];
+      weighingListsDB = data.weighingLists || [];
       cfg   = data.cfg || { lockedPrice: '' };
     } else {
-      flock = { initial: 17000 }; sales = []; cfg = { lockedPrice: '' };
+      flock = { initial: 17000 }; sales = []; weighingListsDB = []; cfg = { lockedPrice: '' };
     }
-    updateHeader(); renderWtBtns(); refreshLockedBtn(); renderHistory(); renderSettings();
+    updateHeader(); renderWtBtns(); refreshLockedBtn(); renderHistory(); renderSettings(); renderSavedLists();
   });
 
   function pN(s) { return parseFloat(String(s ?? '').replace(/[,،\s]/g,'')) || 0; }
@@ -377,7 +331,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     if (v >= 1e6) return (v/1e6).toFixed(1).replace(/\.0$/,'') + ' مليون';
     return v.toLocaleString('en-US');
   }
-  function todayStr() { return new Date().toLocaleDateString('ar', { year:'numeric', month:'long', day:'numeric' }); }
+  function todayStr() { return new Date().toLocaleDateString('ar', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' }); }
   function derived() {
     const sold = sales.reduce((a,s) => a + s.count, 0);
     return { sold, remaining: flock.initial - sold, revenue: sales.reduce((a,s) => a + s.total, 0) };
@@ -389,13 +343,14 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   }
 
   function switchTab(tab) {
-    ['weighing','entry','history','settings'].forEach(t => {
+    ['weighing','saved-lists','entry','history','settings'].forEach(t => {
       document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
       document.getElementById('tab-'   + t).classList.toggle('active', t === tab);
     });
     if (tab === 'history') renderHistory();
+    if (tab === 'saved-lists') renderSavedLists();
     if (tab === 'settings') renderSettings();
-    if (tab === 'weighing') document.getElementById('w-full').focus(); // تركيز فوري
+    if (tab === 'weighing') document.getElementById('w-full').focus();
   }
 
   // ══════════════════════════════════════
@@ -412,7 +367,6 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 
     if (fw <= 0) { toast('❌ يرجى إدخال الوزن المملوء!'); inpFull.focus(); return; }
 
-    // قاعدة التوريث:
     if (cg !== '') wLastCages = pN(cg);
     if (ew !== '') wLastEmpty = pN(ew);
 
@@ -425,16 +379,15 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     const net = fw - wLastEmpty;
     wList.push({ full: fw, cages: wLastCages, empty: wLastEmpty, net: net });
 
-    // الإدخال السريع: تصفير المملوء فقط والعودة إليه
-    inpFull.value = '';
-    inpCages.value = '';
-    inpEmpty.value = '';
+    inpFull.value = ''; inpCages.value = ''; inpEmpty.value = '';
     inpFull.focus();
+    document.getElementById('w-report-container').style.display = 'none'; // إخفاء التقرير عند إضافة جديد
+    renderWeightsList();
+  }
 
-    // إخفاء التقرير إن كان معروضاً (لأن هناك داتا جديدة)
-    document.getElementById('w-report').style.display = 'none';
-    document.getElementById('btn-w-transfer').style.display = 'none';
-
+  function deleteWeightRow(idx) {
+    wList.splice(idx, 1);
+    document.getElementById('w-report-container').style.display = 'none'; // إخفاء التقرير لأن الأرقام تغيرت
     renderWeightsList();
   }
 
@@ -443,7 +396,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     document.getElementById('w-count').textContent = wList.length;
 
     if (wList.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="color:#aaa;">لم يتم إضافة وزنات بعد</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="color:#aaa;">لم يتم إضافة وزنات بعد</td></tr>';
       return;
     }
 
@@ -453,7 +406,8 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
         <td style="color:#1e6b40;">${w.full}</td>
         <td>${w.cages}</td>
         <td>${w.empty}</td>
-        <td style="font-weight:900; color:#c62828;">${w.net.toFixed(2)}</td>
+        <td style="font-weight:900; color:#111;">${w.net.toFixed(2)}</td>
+        <td><button class="btn-del-row" onclick="window.deleteWeightRow(${idx})">🗑️</button></td>
       </tr>
     `).join('');
   }
@@ -461,77 +415,118 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   function clearWeights() {
     if(!confirm("هل تريد مسح جميع الوزنات والبدء من جديد؟")) return;
     wList = []; wLastCages = ''; wLastEmpty = '';
-    document.getElementById('w-report').style.display = 'none';
-    document.getElementById('btn-w-transfer').style.display = 'none';
-    document.getElementById('w-full').value = '';
-    document.getElementById('w-cages').value = '';
-    document.getElementById('w-empty').value = '';
-    renderWeightsList();
-    toast('🗑️ تم مسح القائمة');
+    document.getElementById('w-report-container').style.display = 'none';
+    document.getElementById('w-full').value = ''; document.getElementById('w-cages').value = ''; document.getElementById('w-empty').value = '';
+    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = '';
+    renderWeightsList(); toast('🗑️ تم مسح القائمة');
+  }
+
+  function calculateWeighingTotals() {
+    let cpc = pN(document.getElementById('w-chickens-per-cage').value);
+    let totFull = wList.reduce((a, b) => a + b.full, 0);
+    let totEmpty = wList.reduce((a, b) => a + b.empty, 0);
+    let totCages = wList.reduce((a, b) => a + b.cages, 0);
+    let netWeight = totFull - totEmpty;
+    let totalChicks = totCages * cpc;
+    let avgWt = totalChicks > 0 ? (netWeight / totalChicks) : 0;
+    
+    return { cpc, totFull, totEmpty, totCages, netWeight, totalChicks, avgWt };
   }
 
   function finalizeWeights() {
     if (wList.length === 0) return toast('⚠️ لا توجد وزنات لتصفيتها!');
+    let t = calculateWeighingTotals();
+    if (t.cpc <= 0) return toast('⚠️ يرجى تحديد إعداد التعبئة (عدد الدجاج في القفص)');
 
-    let cpc = pN(document.getElementById('w-chickens-per-cage').value);
-    if (cpc <= 0) return toast('⚠️ يرجى تحديد إعداد التعبئة (عدد الدجاج في القفص)');
-
-    let totFull = wList.reduce((a, b) => a + b.full, 0);
-    let totEmpty = wList.reduce((a, b) => a + b.empty, 0);
-    let totCages = wList.reduce((a, b) => a + b.cages, 0);
-
-    let netWeight = totFull - totEmpty;
-    let totalChicks = totCages * cpc;
-    let avgWt = totalChicks > 0 ? (netWeight / totalChicks) : 0;
-
-    // طباعة التقرير بالتنسيق المطلوب حصراً
     const reportHTML = `📊 تصفية القائمة:<br>
-إجمالي الأقفاص: ${totCages} قفص<br>
-إجمالي الدجاج: ${totalChicks} دجاجة<br>
-الوزن المملوء الكلي: ${totFull.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
-الوزن الفارغ الكلي: ${totEmpty.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
-الوزن الصافي (اللحم): ${netWeight.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
-معدل وزن الدجاجة: ${avgWt.toFixed(3).replace(/\.?0+$/,'')} كغم`;
+إجمالي الأقفاص: ${t.totCages} قفص<br>
+إجمالي الدجاج: ${t.totalChicks} دجاجة<br>
+الوزن المملوء الكلي: ${t.totFull.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
+الوزن الفارغ الكلي: ${t.totEmpty.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
+الوزن الصافي (اللحم): ${t.netWeight.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
+معدل وزن الدجاجة: ${t.avgWt.toFixed(3).replace(/\.?0+$/,'')} كغم`;
 
-    const repBox = document.getElementById('w-report');
-    repBox.innerHTML = reportHTML;
-    repBox.style.display = 'block';
-    document.getElementById('btn-w-transfer').style.display = 'block';
+    document.getElementById('w-report').innerHTML = reportHTML;
+    document.getElementById('w-report-container').style.display = 'block';
+  }
+
+  function saveWeighingListOnly() {
+    let t = calculateWeighingTotals();
+    let buyer = document.getElementById('w-buyer').value.trim() || 'بدون اسم';
+    let notes = document.getElementById('w-notes').value.trim();
+
+    const newList = {
+      id: Date.now().toString(),
+      date: todayStr(),
+      buyer: buyer,
+      notes: notes,
+      itemsCount: wList.length,
+      ...t
+    };
+
+    weighingListsDB.push(newList);
+    saveToFirebase('weighingLists', weighingListsDB);
+    
+    toast('✅ تم حفظ القائمة بنجاح!');
+    wList = []; wLastCages = ''; wLastEmpty = ''; renderWeightsList();
+    document.getElementById('w-report-container').style.display = 'none';
+    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = '';
+    switchTab('saved-lists'); // الإنتقال لتبويب القوائم
   }
 
   function transferToMainEntry() {
-    let cpc = pN(document.getElementById('w-chickens-per-cage').value);
-    let totFull = wList.reduce((a, b) => a + b.full, 0);
-    let totEmpty = wList.reduce((a, b) => a + b.empty, 0);
-    let totCages = wList.reduce((a, b) => a + b.cages, 0);
+    let t = calculateWeighingTotals();
+    let buyer = document.getElementById('w-buyer').value.trim();
+    let notes = document.getElementById('w-notes').value.trim();
+    let finalNote = `قبان (${wList.length} وزنات)`;
+    if(buyer) finalNote += ` - للمشتري: ${buyer}`;
+    if(notes) finalNote += ` - ${notes}`;
 
-    let netWeight = totFull - totEmpty;
-    let totalChicks = totCages * cpc;
-    let avgWt = netWeight / totalChicks;
+    setFormattedInput('inp-count', t.totalChicks, false);
+    setFormattedInput('inp-total-wt', t.netWeight, true);
+    setFormattedInput('inp-wt', t.avgWt, true);
+    document.getElementById('inp-note').value = finalNote;
 
-    // تعبئة خانة الإدخال
-    setFormattedInput('inp-count', totalChicks, false);
-    setFormattedInput('inp-total-wt', netWeight, true);
-    setFormattedInput('inp-wt', avgWt, true);
-    
-    // إضافة ملاحظة تلقائية
-    document.getElementById('inp-note').value = `تم ترحيلها من قبان التحميل (${wList.length} وزنات - أقفاص: ${totCages})`;
-
-    lastInputMode = 'totWt'; // لإجبار النظام على احترام الوزن الكلي عند إدخال السعر لاحقاً
-    onFormChange('totWt');
-    
+    lastInputMode = 'totWt'; onFormChange('totWt');
     switchTab('entry');
-    
-    // يمكنه التركيز على حقل السعر تلقائياً
     if(!document.getElementById('inp-pr').value) document.getElementById('inp-pr').focus();
 
-    toast("✅ تم إدراج القائمة! أكمل السعر ثم اضغط حفظ");
-    
-    // مسح الذاكرة لتجهيزها لسيارة أخرى
-    wList = []; wLastCages = ''; wLastEmpty = '';
-    renderWeightsList();
-    document.getElementById('w-report').style.display = 'none';
-    document.getElementById('btn-w-transfer').style.display = 'none';
+    toast("✅ تم إدراج الأرقام! أكمل السعر ثم اضغط حفظ");
+    wList = []; wLastCages = ''; wLastEmpty = ''; renderWeightsList();
+    document.getElementById('w-report-container').style.display = 'none';
+    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = '';
+  }
+
+  function renderSavedLists() {
+    const list = document.getElementById('saved-lists-container');
+    if (weighingListsDB.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon">🧾</div><div class="empty-txt">لا توجد قوائم قبان محفوظة</div></div>`;
+      return;
+    }
+
+    list.innerHTML = [...weighingListsDB].reverse().map(l => `
+      <div class="sale-card list-card">
+        <div class="sale-top">
+          <div><span class="sale-count">👤 ${l.buyer}</span><span class="sale-date">${l.date}</span></div>
+          <button class="btn-del" onclick="window.deleteSavedList('${l.id}')">🗑️ حذف</button>
+        </div>
+        <div class="sale-grid">
+          <div class="sale-cell"><div class="sc-val">${l.totalChicks}</div><div class="sc-lbl">دجاجة</div></div>
+          <div class="sale-cell"><div class="sc-val">${l.netWeight.toFixed(2)}</div><div class="sc-lbl">الوزن الصافي</div></div>
+          <div class="sale-cell hi"><div class="sc-val">${l.avgWt.toFixed(3)}</div><div class="sc-lbl">المعدل</div></div>
+        </div>
+        <div style="font-size:10px; color:#888; text-align:center; margin-top:5px;">(${l.itemsCount} وزنات - ${l.totCages} قفص)</div>
+        ${l.notes ? `<div class="sale-note">📝 ${l.notes}</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function deleteSavedList(id) {
+    if(confirm('حذف هذه القائمة؟')) {
+      weighingListsDB = weighingListsDB.filter(l => l.id !== id);
+      saveToFirebase('weighingLists', weighingListsDB);
+      toast('🗑️ تم حذف القائمة');
+    }
   }
 
 
@@ -540,65 +535,38 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   // ══════════════════════════════════════
   function updateHeader() {
     const d = derived();
-    document.getElementById('h-initial').textContent   = fmt(flock.initial);
-    document.getElementById('h-sold').textContent      = fmt(d.sold);
+    document.getElementById('h-initial').textContent = fmt(flock.initial);
+    document.getElementById('h-sold').textContent = fmt(d.sold);
     document.getElementById('h-remaining').textContent = fmt(d.remaining);
-    document.getElementById('h-revenue').textContent   = fmt(d.revenue);
+    document.getElementById('h-revenue').textContent = fmt(d.revenue);
   }
 
-  function renderWtBtns() {
-    document.getElementById('wt-grid').innerHTML = WEIGHTS.map(w =>
-      `<button class="wt-btn${selWt === String(w) ? ' active' : ''}" onclick="window.pickWt('${w}')">${w} كغ</button>`
-    ).join('');
-  }
-
-  function pickWt(w) { 
-    selWt = String(w); 
-    document.getElementById('inp-wt').value = w; 
-    renderWtBtns(); 
-    onFormChange('avg');
-  }
+  function renderWtBtns() { document.getElementById('wt-grid').innerHTML = WEIGHTS.map(w => `<button class="wt-btn${selWt === String(w) ? ' active' : ''}" onclick="window.pickWt('${w}')">${w} كغ</button>`).join(''); }
+  function pickWt(w) { selWt = String(w); document.getElementById('inp-wt').value = w; renderWtBtns(); onFormChange('avg'); }
 
   function handleTyping(el, allowDecimal, mode) {
     let val = el.value;
     val = allowDecimal ? val.replace(/[^0-9.]/g, '') : val.replace(/[^0-9]/g, '');
-    if(allowDecimal) {
-      const parts = val.split('.');
-      if(parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
-    }
+    if(allowDecimal) { const parts = val.split('.'); if(parts.length > 2) val = parts[0] + '.' + parts.slice(1).join(''); }
     if(val !== '') {
       if(allowDecimal && val.includes('.')) {
-        let parts = val.split('.');
-        parts[0] = parts[0] !== '' ? parseInt(parts[0], 10).toLocaleString('en-US') : '';
-        el.value = parts.join('.');
-      } else {
-        el.value = parseInt(val, 10).toLocaleString('en-US');
-      }
+        let parts = val.split('.'); parts[0] = parts[0] !== '' ? parseInt(parts[0], 10).toLocaleString('en-US') : ''; el.value = parts.join('.');
+      } else { el.value = parseInt(val, 10).toLocaleString('en-US'); }
     } else { el.value = ''; }
-    
     if(mode) onFormChange(mode); else onFormChange();
   }
 
   function setFormattedInput(id, val, allowDecimal) {
     if(!val || val === 0) { document.getElementById(id).value = ''; return; }
-    let v = String(val);
     if(allowDecimal) {
-      let rounded = Number(val).toFixed(3).replace(/\.?0+$/, '');
-      let parts = rounded.split('.');
-      parts[0] = parseInt(parts[0] || 0, 10).toLocaleString('en-US');
-      document.getElementById(id).value = parts.join('.');
-    } else {
-      document.getElementById(id).value = parseInt(Math.round(val), 10).toLocaleString('en-US');
-    }
+      let rounded = Number(val).toFixed(3).replace(/\.?0+$/, ''); let parts = rounded.split('.');
+      parts[0] = parseInt(parts[0] || 0, 10).toLocaleString('en-US'); document.getElementById(id).value = parts.join('.');
+    } else { document.getElementById(id).value = parseInt(Math.round(val), 10).toLocaleString('en-US'); }
   }
 
   function onFormChange(newMode) {
     if(newMode) lastInputMode = newMode;
-    let cn = pN(document.getElementById('inp-count').value);
-    let pr = pN(document.getElementById('inp-pr').value);
-    let amt = pN(document.getElementById('inp-total-amt').value);
-    let totWt = pN(document.getElementById('inp-total-wt').value);
-    let avgWt = pN(document.getElementById('inp-wt').value);
+    let cn = pN(document.getElementById('inp-count').value); let pr = pN(document.getElementById('inp-pr').value); let amt = pN(document.getElementById('inp-total-amt').value); let totWt = pN(document.getElementById('inp-total-wt').value); let avgWt = pN(document.getElementById('inp-wt').value);
 
     if (lastInputMode === 'amt' && amt > 0) {
       if (pr > 0) { totWt = amt / pr; setFormattedInput('inp-total-wt', totWt, true); }
@@ -607,119 +575,84 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
       if (pr > 0) { amt = totWt * pr; setFormattedInput('inp-total-amt', amt, false); }
       if (cn > 0) { avgWt = totWt / cn; setFormattedInput('inp-wt', avgWt, true); selWt = ''; renderWtBtns(); }
     } else if (lastInputMode === 'avg' && avgWt > 0) {
-      if (cn > 0) {
-        totWt = cn * avgWt; setFormattedInput('inp-total-wt', totWt, true);
-        if (pr > 0) { amt = totWt * pr; setFormattedInput('inp-total-amt', amt, false); }
-      }
+      if (cn > 0) { totWt = cn * avgWt; setFormattedInput('inp-total-wt', totWt, true); if (pr > 0) { amt = totWt * pr; setFormattedInput('inp-total-amt', amt, false); } }
     }
 
     document.getElementById('price-hint').textContent = pr > 0 ? `= ${fmt(pr)} دينار عراقي لكل كيلوغرام` : '';
-    const lb = document.getElementById('locked-btn');
-    if (lb.style.display !== 'none') lb.classList.toggle('used', String(pN(cfg.lockedPrice)) === String(pr) && pr > 0);
-
-    const canCalc = cn > 0 && avgWt > 0 && pr > 0;
-    document.getElementById('btn-save').disabled = !canCalc;
+    const lb = document.getElementById('locked-btn'); if (lb.style.display !== 'none') lb.classList.toggle('used', String(pN(cfg.lockedPrice)) === String(pr) && pr > 0);
+    const canCalc = cn > 0 && avgWt > 0 && pr > 0; document.getElementById('btn-save').disabled = !canCalc;
 
     const rp = document.getElementById('result-panel');
     if (canCalc) {
-      rp.style.display = '';
-      document.getElementById('r-formula').textContent = `${fmt(cn)} طير × ${avgWt.toFixed(3).replace(/\.?0+$/,'')} كغ × ${fmt(pr)} د/كغ`;
-      document.getElementById('r-wt').textContent  = fmt(totWt) + ' كغ';
-      document.getElementById('r-amt').textContent = fmt(amt) + ' د.ع';
+      rp.style.display = ''; document.getElementById('r-formula').textContent = `${fmt(cn)} طير × ${avgWt.toFixed(3).replace(/\.?0+$/,'')} كغ × ${fmt(pr)} د/كغ`;
+      document.getElementById('r-wt').textContent = fmt(totWt) + ' كغ'; document.getElementById('r-amt').textContent = fmt(amt) + ' د.ع';
     } else { rp.style.display = 'none'; }
   }
 
-  function useLocked() {
-    const lp = cfg.lockedPrice;
-    if (lp) { setFormattedInput('inp-pr', lp, false); onFormChange(); }
-  }
+  function useLocked() { const lp = cfg.lockedPrice; if (lp) { setFormattedInput('inp-pr', lp, false); onFormChange(); } }
 
   function resetForm() {
     editId = null; selWt = ''; lastInputMode = 'avg';
-    document.getElementById('inp-count').value = '';
-    document.getElementById('inp-wt').value    = '';
-    document.getElementById('inp-total-wt').value = '';
-    document.getElementById('inp-total-amt').value = '';
-    document.getElementById('inp-note').value  = '';
+    document.getElementById('inp-count').value = ''; document.getElementById('inp-wt').value = ''; document.getElementById('inp-total-wt').value = ''; document.getElementById('inp-total-amt').value = ''; document.getElementById('inp-note').value = '';
     if (cfg.lockedPrice) setFormattedInput('inp-pr', cfg.lockedPrice, false); else document.getElementById('inp-pr').value = '';
-    document.getElementById('edit-banner').style.display = 'none';
-    document.getElementById('btn-save').textContent = '💾 حفظ العملية';
+    document.getElementById('edit-banner').style.display = 'none'; document.getElementById('btn-save').textContent = '💾 حفظ العملية';
     renderWtBtns(); onFormChange();
   }
 
   function doSave() {
-    const cn = pN(document.getElementById('inp-count').value);
-    const wn = pN(document.getElementById('inp-wt').value);
-    const pn = pN(document.getElementById('inp-pr').value);
+    const cn = pN(document.getElementById('inp-count').value); const wn = pN(document.getElementById('inp-wt').value); const pn = pN(document.getElementById('inp-pr').value);
     if (!cn || !wn || !pn) return;
-
-    const totWt = pN(document.getElementById('inp-total-wt').value) || (cn * wn); // نأخذ الوزن الكلي المكتوب لتفادي الكسور
-    const sale  = { id: editId || Date.now().toString(), date: todayStr(), count: cn, avgWt: wn, price: pn, totWt, total: totWt * pn, note: document.getElementById('inp-note').value.trim() };
-
-    if (editId) { sales = sales.map(s => s.id === editId ? sale : s); toast('✅ تم حفظ التعديل'); } 
-    else { sales.push(sale); toast('✅ تم حفظ العملية'); }
-    
+    const totWt = pN(document.getElementById('inp-total-wt').value) || (cn * wn);
+    const sale = { id: editId || Date.now().toString(), date: todayStr(), count: cn, avgWt: wn, price: pn, totWt, total: totWt * pn, note: document.getElementById('inp-note').value.trim() };
+    if (editId) { sales = sales.map(s => s.id === editId ? sale : s); toast('✅ تم حفظ التعديل'); } else { sales.push(sale); toast('✅ تم حفظ العملية'); }
     saveToFirebase('sales', sales); resetForm(); switchTab('history');
   }
 
   function renderHistory() {
-    const d = derived();
-    document.getElementById('s-initial').textContent   = fmt(flock.initial) + ' طير';
-    document.getElementById('s-sold').textContent      = fmt(d.sold) + ' طير';
-    document.getElementById('s-remaining').textContent = fmt(d.remaining) + ' طير';
-    document.getElementById('s-revenue').textContent   = fmt(d.revenue) + ' د.ع';
-
-    const lp = pN(cfg.lockedPrice);
-    const eb = document.getElementById('estimator');
-    if (d.remaining > 0 && lp > 0) {
-      eb.style.display = ''; document.getElementById('est-desc').textContent = `المتبقي: ${fmt(d.remaining)} طير — بمتوسط وزن 1.8 كغ على ${fmt(lp)} د/كغ:`;
-      document.getElementById('est-val').textContent = '≈ ' + fmt(d.remaining * 1.8 * lp) + ' دينار';
-    } else { eb.style.display = 'none'; }
-
-    document.getElementById('history-hdr').textContent = `عمليات البيع (${sales.length})`;
     const list = document.getElementById('sales-list');
-    if (sales.length === 0) { list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-txt">لا توجد عمليات محفوظة</div><div class="empty-sub">اذهب لتبويب الإدخال وابدأ التسجيل</div></div>`; return; }
+    if (sales.length === 0) { list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-txt">لا توجد مبيعات محفوظة</div></div>`; return; }
 
-    list.innerHTML = [...sales].reverse().map(sale => {
-      if (confirmDelId === sale.id) {
-        return `<div class="sale-card"><div class="confirm-del-box"><div class="confirm-del-txt">⚠️ حذف هذه العملية نهائياً؟</div><div class="confirm-row"><button class="btn-yes" onclick="window.doDelete('${sale.id}')">نعم، احذف</button><button class="btn-no" onclick="window.cancelDel()">إلغاء</button></div></div></div>`;
-      }
-      return `<div class="sale-card"><div class="sale-top"><div><span class="sale-count">${fmt(sale.count)} طير</span><span class="sale-date">${sale.date}</span></div><div class="sale-actions"><button class="btn-edit" onclick="window.startEdit('${sale.id}')">✏️ تعديل</button><button class="btn-del" onclick="window.askDel('${sale.id}')">🗑️ حذف</button></div></div><div class="sale-grid"><div class="sale-cell"><div class="sc-val">${Number(sale.avgWt).toFixed(3).replace(/\.?0+$/,'')} كغ</div><div class="sc-lbl">الوزن/طير</div></div><div class="sale-cell"><div class="sc-val">${fmt(sale.price)}</div><div class="sc-lbl">السعر/كغ</div></div><div class="sale-cell hi"><div class="sc-val">${fmt(sale.total)} د</div><div class="sc-lbl">الإجمالي</div></div></div>${sale.note ? `<div class="sale-note">📝 ${sale.note}</div>` : ''}</div>`;
-    }).join('');
+    list.innerHTML = [...sales].reverse().map(sale => `
+      <div class="sale-card">
+        <div class="sale-top">
+          <div><span class="sale-count">${fmt(sale.count)} طير</span><span class="sale-date">${sale.date}</span></div>
+          <div class="sale-actions"><button class="btn-edit" onclick="window.startEdit('${sale.id}')">✏️</button><button class="btn-del" onclick="window.doDeleteSale('${sale.id}')">🗑️</button></div>
+        </div>
+        <div class="sale-grid">
+          <div class="sale-cell"><div class="sc-val">${Number(sale.avgWt).toFixed(3).replace(/\.?0+$/,'')} كغ</div><div class="sc-lbl">الوزن/طير</div></div>
+          <div class="sale-cell"><div class="sc-val">${fmt(sale.price)}</div><div class="sc-lbl">السعر/كغ</div></div>
+          <div class="sale-cell hi"><div class="sc-val">${fmt(sale.total)} د</div><div class="sc-lbl">الإجمالي</div></div>
+        </div>
+        ${sale.note ? `<div class="sale-note">📝 ${sale.note}</div>` : ''}
+      </div>
+    `).join('');
   }
 
   function startEdit(id) {
-    const sale = sales.find(s => s.id === id);
-    if (!sale) return;
-    editId = id; selWt = String(sale.avgWt); lastInputMode = 'totWt'; // الأولوية للوزن الكلي القديم
+    const sale = sales.find(s => s.id === id); if (!sale) return;
+    editId = id; selWt = String(sale.avgWt); lastInputMode = 'totWt';
     setFormattedInput('inp-count', sale.count, false); setFormattedInput('inp-pr', sale.price, false); setFormattedInput('inp-wt', sale.avgWt, true); setFormattedInput('inp-total-wt', sale.totWt, true); setFormattedInput('inp-total-amt', sale.total, false);
-    document.getElementById('inp-note').value  = sale.note || ''; document.getElementById('edit-banner').style.display = 'flex'; document.getElementById('btn-save').textContent = '💾 حفظ التعديل';
+    document.getElementById('inp-note').value = sale.note || ''; document.getElementById('edit-banner').style.display = 'flex'; document.getElementById('btn-save').textContent = '💾 حفظ التعديل';
     renderWtBtns(); onFormChange(); switchTab('entry'); window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function askDel(id)  { confirmDelId = id; renderHistory(); }
-  function cancelDel() { confirmDelId = null; renderHistory(); }
-  function doDelete(id) { sales = sales.filter(s => s.id !== id); saveToFirebase('sales', sales); confirmDelId = null; toast('🗑️ تم حذف العملية'); }
-
-  function renderSettings() {
-    if(document.activeElement.id !== 'inp-flock') setFormattedInput('inp-flock', flock.initial, false);
-    if(document.activeElement.id !== 'inp-locked') setFormattedInput('inp-locked', cfg.lockedPrice, false);
-    refreshLockedOk();
-  }
+  function doDeleteSale(id) { if(confirm('حذف هذه البيعة؟')) { sales = sales.filter(s => s.id !== id); saveToFirebase('sales', sales); toast('🗑️ تم الحذف'); } }
+  
+  function renderSettings() { if(document.activeElement.id !== 'inp-flock') setFormattedInput('inp-flock', flock.initial, false); if(document.activeElement.id !== 'inp-locked') setFormattedInput('inp-locked', cfg.lockedPrice, false); refreshLockedOk(); }
   function saveFlock(v) { flock.initial = pN(v) || 0; saveToFirebase('flock', flock); }
   function saveLockedPrice(v) { cfg.lockedPrice = pN(v) || ''; saveToFirebase('cfg', cfg); if (cfg.lockedPrice && !editId) { setFormattedInput('inp-pr', cfg.lockedPrice, false); onFormChange(); } }
   function refreshLockedOk() { const lp = pN(cfg.lockedPrice); const el = document.getElementById('locked-ok'); if (lp > 0) { el.style.display=''; el.textContent = `✅ السعر المقفّل: ${fmt(lp)} دينار/كغ`; } else { el.style.display='none'; } }
-  function refreshLockedBtn() { const lb = document.getElementById('locked-btn'); const lp = cfg.lockedPrice; if (lp) { lb.style.display = ''; lb.textContent = `🔒 السعر المقفّل: ${fmt(lp)} د.ع / كغ — اضغط للاستخدام`; } else { lb.style.display = 'none'; } }
-  function clearAll() { if (!confirm('هل أنت متأكد من حذف جميع عمليات البيع المسجّلة؟\nلا يمكن التراجع عن هذا الإجراء.')) return; sales = []; saveToFirebase('sales', sales); toast('🗑️ تم حذف جميع السجلات'); }
-
-  // Expose global methods
-  window.switchTab = switchTab; window.pickWt = pickWt; window.handleTyping = handleTyping; window.useLocked = useLocked; window.resetForm = resetForm; window.doSave = doSave; window.startEdit = startEdit; window.askDel = askDel; window.cancelDel = cancelDel; window.doDelete = doDelete; window.saveFlock = saveFlock; window.saveLockedPrice = saveLockedPrice; window.clearAll = clearAll;
   
-  // Expose Weighing methods
-  window.addWeightEntry = addWeightEntry;
-  window.finalizeWeights = finalizeWeights;
-  window.clearWeights = clearWeights;
-  window.transferToMainEntry = transferToMainEntry;
+  function clearAllSales() { 
+    if (!confirm('⚠️ تحذير: سيتم حذف جميع المبيعات وقوائم القبان نهائياً.\nهل أنت متأكد؟')) return; 
+    sales = []; weighingListsDB = []; 
+    saveToFirebase('sales', sales); saveToFirebase('weighingLists', weighingListsDB);
+    toast('🗑️ تم مسح كل البيانات'); 
+  }
+
+  // Global exposes
+  window.switchTab = switchTab; window.pickWt = pickWt; window.handleTyping = handleTyping; window.useLocked = useLocked; window.resetForm = resetForm; window.doSave = doSave; window.startEdit = startEdit; window.doDeleteSale = doDeleteSale; window.saveFlock = saveFlock; window.saveLockedPrice = saveLockedPrice; window.clearAllSales = clearAllSales; window.deleteSavedList = deleteSavedList;
+  window.addWeightEntry = addWeightEntry; window.deleteWeightRow = deleteWeightRow; window.finalizeWeights = finalizeWeights; window.clearWeights = clearWeights; window.transferToMainEntry = transferToMainEntry; window.saveWeighingListOnly = saveWeighingListOnly;
 
 </script>
 </body>

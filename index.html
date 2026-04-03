@@ -43,7 +43,6 @@ body {
 
 /* ─── Inputs ─── */
 .big-input { width: 100%; text-align: center; border: 2.5px solid #ddeee2; border-radius: 14px; padding: 13px 10px; font-size: 28px; font-weight: 900; outline: none; color: #1a2e20; background: #fafcfb; transition: all 0.2s; font-family: inherit; -moz-appearance: textfield; }
-.big-input::-webkit-inner-spin-button, .big-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .big-input:focus { border-color: #1e6b40; background: #f3fbf5; }
 .note-input { width: 100%; border: none; outline: none; font-size: 14px; color: #555; background: transparent; text-align: right; font-family: inherit; padding: 2px 0; }
 
@@ -182,8 +181,8 @@ body {
 
     <div class="card">
       <div class="card-lbl">🐔 عدد الطيور</div>
-      <input class="big-input" type="number" inputmode="numeric" id="inp-count"
-             placeholder="مثال: 450" oninput="window.onFormChange()">
+      <input class="big-input" type="text" inputmode="numeric" id="inp-count"
+             placeholder="مثال: 450" oninput="window.handleTyping(this, false, null)">
     </div>
 
     <div class="card">
@@ -191,24 +190,30 @@ body {
       <button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">
         🔒 السعر المقفّل — اضغط للاستخدام
       </button>
-      <input class="big-input" type="number" inputmode="numeric" id="inp-pr"
-             placeholder="مثال: 5500" oninput="window.onFormChange()">
+      <input class="big-input" type="text" inputmode="numeric" id="inp-pr"
+             placeholder="مثال: 5,500" oninput="window.handleTyping(this, false, null)">
       <div class="price-hint" id="price-hint"></div>
     </div>
 
+    <div class="card" style="background: #fffdf2; border: 1.5px solid #ffecb3;">
+      <div class="card-lbl" style="color: #d4a000;">💵 المبلغ الإجمالي (دينار)</div>
+      <input class="big-input" style="background: #fffcf2; border-color: #ffe082;" type="text" inputmode="numeric" id="inp-total-amt"
+             placeholder="مثال: 4,500,000" oninput="window.handleTyping(this, false, 'amt')">
+      <div style="font-size: 11px; color: #a67c00; text-align: center; margin-top: 6px;">يمكنك كتابة المبلغ هنا وسنستنتج الوزن تلقائياً</div>
+    </div>
+
+    <div class="card" style="background: #f2f9ff; border: 1.5px solid #b3d4ff;">
+      <div class="card-lbl" style="color: #0056b3;">⚖️ الوزن الكلي (كغ)</div>
+      <input class="big-input" style="background: #f2f9ff; border-color: #99c2ff;" type="text" inputmode="decimal" id="inp-total-wt"
+             placeholder="مثال: 150" oninput="window.handleTyping(this, true, 'totWt')">
+      <div style="font-size: 11px; color: #004085; text-align: center; margin-top: 6px;">أو اكتب الوزن الكلي هنا وسنستنتج الباقي</div>
+    </div>
+
     <div class="card">
-      <div class="card-lbl">⚖️ متوسط وزن الطير (كغ)</div>
+      <div class="card-lbl">🐥 متوسط وزن الطير الواحد (كغ)</div>
       <div class="wt-grid" id="wt-grid"></div>
-      <input class="big-input" type="number" inputmode="decimal" id="inp-wt"
-             placeholder="أدخل الوزن الذي تريده..." oninput="window.onWtInput()">
-             
-      <div style="margin-top: 15px; padding-top: 12px; border-top: 1.5px dashed #ddeee2;">
-        <div class="card-lbl" style="font-size: 11px; color: #777; margin-bottom: 8px;">
-          🪄 أو أدخل المبلغ الإجمالي لمعرفة الوزن التقريبي تلقائياً:
-        </div>
-        <input class="big-input" style="font-size: 20px; padding: 10px; background: #fff8e1; border-color: #ffe082;" type="number" inputmode="numeric" id="inp-total-guess"
-               placeholder="المبلغ الإجمالي (مثال: 4500000)" oninput="window.guessWeight()">
-      </div>
+      <input class="big-input" type="text" inputmode="decimal" id="inp-wt"
+             placeholder="وزن الطير..." oninput="window.handleTyping(this, true, 'avg')">
     </div>
 
     <div class="card" style="padding:11px 16px">
@@ -221,11 +226,11 @@ body {
       <div class="result-grid">
         <div class="result-item n">
           <div class="result-val" id="r-wt"></div>
-          <div class="result-lbl">الوزن الكلي</div>
+          <div class="result-lbl">الوزن الكلي المحتسب</div>
         </div>
         <div class="result-item g">
           <div class="result-val" id="r-amt"></div>
-          <div class="result-lbl">المبلغ الإجمالي</div>
+          <div class="result-lbl">المبلغ الإجمالي المحتسب</div>
         </div>
       </div>
     </div>
@@ -272,15 +277,15 @@ body {
     <div class="card">
       <div class="card-lbl">🐔 إعداد القطيع</div>
       <p class="settings-desc">العدد الكلي الابتدائي — يشمل المباع والكات وما تبقى في المزرعة</p>
-      <input class="big-input" type="number" inputmode="numeric" id="inp-flock"
-             oninput="window.saveFlock(this.value)">
+      <input class="big-input" type="text" inputmode="numeric" id="inp-flock"
+             oninput="window.saveFlock(this.value); window.handleTyping(this, false, null)">
     </div>
 
     <div class="card">
       <div class="card-lbl">🔒 تقفيل السعر الافتراضي</div>
       <p class="settings-desc">يملأ حقل السعر تلقائياً عند كل إدخال جديد — ويمكن تجاوزه عند الحاجة</p>
-      <input class="big-input" type="number" inputmode="numeric" id="inp-locked"
-             placeholder="أدخل السعر د.ع/كغ..." oninput="window.saveLockedPrice(this.value)">
+      <input class="big-input" type="text" inputmode="numeric" id="inp-locked"
+             placeholder="أدخل السعر د.ع/كغ..." oninput="window.saveLockedPrice(this.value); window.handleTyping(this, false, null)">
       <div class="locked-ok" id="locked-ok" style="display:none"></div>
     </div>
 
@@ -317,10 +322,11 @@ body {
   let editId  = null;
   let confirmDelId = null;
   let selWt   = '';
+  
+  // تتبع آخر حقل تم إدخال البيانات فيه لتجنب مسح بيانات المستخدم
+  let lastInputMode = 'avg'; // يمكن أن يكون 'amt' أو 'totWt' أو 'avg'
 
-  function saveToFirebase(key, val) {
-    set(ref(db, 'farmData/' + key), val);
-  }
+  function saveToFirebase(key, val) { set(ref(db, 'farmData/' + key), val); }
 
   onValue(ref(db, 'farmData'), (snapshot) => {
     const data = snapshot.val();
@@ -340,13 +346,17 @@ body {
     renderSettings();
   });
 
+  // دالة تحويل الرقم وتجاهل الفوارز لتنفيذ العمليات الحسابية
   function pN(s) { return parseFloat(String(s ?? '').replace(/[,،\s]/g,'')) || 0; }
+  
+  // دالة تنسيق الأرقام مع إضافة الفوارز
   function fmt(n) {
     const v = Math.round(+n || 0);
     if (v >= 1e9) return (v/1e9).toFixed(1).replace(/\.0$/,'') + ' مليار';
     if (v >= 1e6) return (v/1e6).toFixed(1).replace(/\.0$/,'') + ' مليون';
-    return v.toLocaleString('ar-IQ');
+    return v.toLocaleString('en-US');
   }
+
   function todayStr() { return new Date().toLocaleDateString('ar', { year:'numeric', month:'long', day:'numeric' }); }
   function derived() {
     const sold = sales.reduce((a,s) => a + s.count, 0);
@@ -354,8 +364,7 @@ body {
   }
   function toast(msg) {
     const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
+    el.textContent = msg; el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2200);
   }
 
@@ -370,9 +379,9 @@ body {
 
   function updateHeader() {
     const d = derived();
-    document.getElementById('h-initial').textContent   = flock.initial.toLocaleString('ar-IQ');
-    document.getElementById('h-sold').textContent      = d.sold.toLocaleString('ar-IQ');
-    document.getElementById('h-remaining').textContent = d.remaining.toLocaleString('ar-IQ');
+    document.getElementById('h-initial').textContent   = flock.initial.toLocaleString('en-US');
+    document.getElementById('h-sold').textContent      = d.sold.toLocaleString('en-US');
+    document.getElementById('h-remaining').textContent = d.remaining.toLocaleString('en-US');
     document.getElementById('h-revenue').textContent   = fmt(d.revenue);
   }
 
@@ -382,73 +391,144 @@ body {
     ).join('');
   }
 
-  function pickWt(w) { selWt = String(w); document.getElementById('inp-wt').value = w; renderWtBtns(); onFormChange(); }
-  function onWtInput() { selWt = document.getElementById('inp-wt').value; renderWtBtns(); onFormChange(); }
+  function pickWt(w) { 
+    selWt = String(w); 
+    document.getElementById('inp-wt').value = w; 
+    renderWtBtns(); 
+    onFormChange('avg'); // تحديث الباقي بناءً على متوسط الوزن
+  }
 
-  // الدالة الجديدة لحساب الوزن التقريبي
-  function guessWeight() {
-    const cn = pN(document.getElementById('inp-count').value);
-    const pn = pN(document.getElementById('inp-pr').value);
-    const total = pN(document.getElementById('inp-total-guess').value);
-
-    // إذا كان العدد والسعر والمبلغ الإجمالي مكتوبين بشكل صحيح
-    if (cn > 0 && pn > 0 && total > 0) {
-      const totalWeight = total / pn;
-      const avgWeight = totalWeight / cn;
-      // نضع النتيجة في حقل الوزن (مقربة لـ 3 مراتب عشرية)
-      document.getElementById('inp-wt').value = parseFloat(avgWeight.toFixed(3));
-      selWt = ''; 
-      renderWtBtns();
-      onFormChange();
+  // ══════════════════════════════════════
+  // دالة الإدخال الذكية (إضافة الفوارز والتحكم بالرياضيات)
+  // ══════════════════════════════════════
+  function handleTyping(el, allowDecimal, mode) {
+    let val = el.value;
+    // حذف أي نصوص مبدئياً والسماح بالنقطة إن كان الرقم عشري
+    val = allowDecimal ? val.replace(/[^0-9.]/g, '') : val.replace(/[^0-9]/g, '');
+    
+    if(allowDecimal) {
+      const parts = val.split('.');
+      if(parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+    }
+    
+    // وضع الفوارز للآلاف
+    if(val !== '') {
+      if(allowDecimal && val.includes('.')) {
+        let parts = val.split('.');
+        parts[0] = parts[0] !== '' ? parseInt(parts[0], 10).toLocaleString('en-US') : '';
+        el.value = parts.join('.');
+      } else {
+        el.value = parseInt(val, 10).toLocaleString('en-US');
+      }
     } else {
-      // تنبيه صامت لحين اكتمال إدخال العدد والسعر
-      onFormChange();
+      el.value = '';
+    }
+    
+    // تنفيذ الحسابات
+    if(mode) {
+       onFormChange(mode);
+    } else {
+       onFormChange(); // الحفاظ على النمط الأخير
     }
   }
 
-  function onFormChange() {
-    const cn = pN(document.getElementById('inp-count').value);
-    const wn = pN(document.getElementById('inp-wt').value);
-    const pn = pN(document.getElementById('inp-pr').value);
+  // المساعد لتعبئة الحقول من الكود بعد الحساب
+  function setFormattedInput(id, val, allowDecimal) {
+    if(!val || val === 0) { document.getElementById(id).value = ''; return; }
+    let v = String(val);
+    if(allowDecimal) {
+      let rounded = Number(val).toFixed(3).replace(/\.?0+$/, '');
+      let parts = rounded.split('.');
+      parts[0] = parseInt(parts[0] || 0, 10).toLocaleString('en-US');
+      document.getElementById(id).value = parts.join('.');
+    } else {
+      document.getElementById(id).value = parseInt(Math.round(val), 10).toLocaleString('en-US');
+    }
+  }
 
-    document.getElementById('price-hint').textContent = pn > 0 ? `= ${fmt(pn)} دينار عراقي لكل كيلوغرام` : '';
+  function onFormChange(newMode) {
+    if(newMode) lastInputMode = newMode;
+
+    let cn = pN(document.getElementById('inp-count').value);
+    let pr = pN(document.getElementById('inp-pr').value);
+    
+    let amt = pN(document.getElementById('inp-total-amt').value);
+    let totWt = pN(document.getElementById('inp-total-wt').value);
+    let avgWt = pN(document.getElementById('inp-wt').value);
+
+    // المنطق الذكي للحساب
+    if (lastInputMode === 'amt' && amt > 0) {
+      if (pr > 0) {
+        totWt = amt / pr;
+        setFormattedInput('inp-total-wt', totWt, true);
+      }
+      if (cn > 0 && totWt > 0) {
+        avgWt = totWt / cn;
+        setFormattedInput('inp-wt', avgWt, true);
+        selWt = ''; renderWtBtns();
+      }
+    } 
+    else if (lastInputMode === 'totWt' && totWt > 0) {
+      if (pr > 0) {
+        amt = totWt * pr;
+        setFormattedInput('inp-total-amt', amt, false);
+      }
+      if (cn > 0) {
+        avgWt = totWt / cn;
+        setFormattedInput('inp-wt', avgWt, true);
+        selWt = ''; renderWtBtns();
+      }
+    }
+    else if (lastInputMode === 'avg' && avgWt > 0) {
+      if (cn > 0) {
+        totWt = cn * avgWt;
+        setFormattedInput('inp-total-wt', totWt, true);
+        if (pr > 0) {
+          amt = totWt * pr;
+          setFormattedInput('inp-total-amt', amt, false);
+        }
+      }
+    }
+
+    // تلميح السعر وقفل السعر
+    document.getElementById('price-hint').textContent = pr > 0 ? `= ${fmt(pr)} دينار عراقي لكل كيلوغرام` : '';
     const lb = document.getElementById('locked-btn');
-    if (lb.style.display !== 'none') lb.classList.toggle('used', String(pN(cfg.lockedPrice)) === String(pn) && pn > 0);
+    if (lb.style.display !== 'none') lb.classList.toggle('used', String(pN(cfg.lockedPrice)) === String(pr) && pr > 0);
 
-    const canCalc = cn > 0 && wn > 0 && pn > 0;
+    // تحديث النتيجة وزر الحفظ
+    const canCalc = cn > 0 && avgWt > 0 && pr > 0;
     document.getElementById('btn-save').disabled = !canCalc;
 
     const rp = document.getElementById('result-panel');
     if (canCalc) {
-      const totWt  = cn * wn;
-      const totAmt = totWt * pn;
       rp.style.display = '';
-      document.getElementById('r-formula').textContent = `${cn.toLocaleString('ar-IQ')} طير × ${wn} كغ × ${fmt(pn)} د/كغ`;
-      document.getElementById('r-wt').textContent  = Math.round(totWt).toLocaleString('ar-IQ') + ' كغ';
-      document.getElementById('r-amt').textContent = fmt(totAmt) + ' د.ع';
+      document.getElementById('r-formula').textContent = `${fmt(cn)} طير × ${avgWt.toFixed(3).replace(/\.?0+$/,'')} كغ × ${fmt(pr)} د/كغ`;
+      document.getElementById('r-wt').textContent  = fmt(totWt) + ' كغ';
+      document.getElementById('r-amt').textContent = fmt(amt) + ' د.ع';
     } else {
       rp.style.display = 'none';
-    }
-    
-    // إذا قام المستخدم بتعديل أي شيء، سنحاول تحديث الوزن التقريبي إذا كان هناك مبلغ مدخل
-    const guessInput = document.getElementById('inp-total-guess');
-    if(document.activeElement !== guessInput && pN(guessInput.value) > 0) {
-        // لا نفعل شيء لتجنب اللوب اللا نهائي
     }
   }
 
   function useLocked() {
     const lp = cfg.lockedPrice;
-    if (lp) { document.getElementById('inp-pr').value = lp; onFormChange(); guessWeight(); }
+    if (lp) { 
+      setFormattedInput('inp-pr', lp, false);
+      onFormChange(); 
+    }
   }
 
   function resetForm() {
-    editId = null; selWt = '';
+    editId = null; selWt = ''; lastInputMode = 'avg';
     document.getElementById('inp-count').value = '';
     document.getElementById('inp-wt').value    = '';
-    document.getElementById('inp-total-guess').value = ''; // تصفير حقل المبلغ التقريبي
+    document.getElementById('inp-total-wt').value = '';
+    document.getElementById('inp-total-amt').value = '';
     document.getElementById('inp-note').value  = '';
-    document.getElementById('inp-pr').value    = cfg.lockedPrice || '';
+    
+    if (cfg.lockedPrice) setFormattedInput('inp-pr', cfg.lockedPrice, false);
+    else document.getElementById('inp-pr').value = '';
+    
     document.getElementById('edit-banner').style.display = 'none';
     document.getElementById('btn-save').textContent = '💾 حفظ العملية';
     renderWtBtns();
@@ -485,16 +565,16 @@ body {
 
   function renderHistory() {
     const d = derived();
-    document.getElementById('s-initial').textContent   = flock.initial.toLocaleString('ar-IQ') + ' طير';
-    document.getElementById('s-sold').textContent      = d.sold.toLocaleString('ar-IQ') + ' طير';
-    document.getElementById('s-remaining').textContent = d.remaining.toLocaleString('ar-IQ') + ' طير';
+    document.getElementById('s-initial').textContent   = fmt(flock.initial) + ' طير';
+    document.getElementById('s-sold').textContent      = fmt(d.sold) + ' طير';
+    document.getElementById('s-remaining').textContent = fmt(d.remaining) + ' طير';
     document.getElementById('s-revenue').textContent   = fmt(d.revenue) + ' د.ع';
 
     const lp = pN(cfg.lockedPrice);
     const eb = document.getElementById('estimator');
     if (d.remaining > 0 && lp > 0) {
       eb.style.display = '';
-      document.getElementById('est-desc').textContent = `المتبقي: ${d.remaining.toLocaleString('ar-IQ')} طير — بمتوسط وزن 1.8 كغ على ${fmt(lp)} د/كغ:`;
+      document.getElementById('est-desc').textContent = `المتبقي: ${fmt(d.remaining)} طير — بمتوسط وزن 1.8 كغ على ${fmt(lp)} د/كغ:`;
       document.getElementById('est-val').textContent = '≈ ' + fmt(d.remaining * 1.8 * lp) + ' دينار';
     } else { eb.style.display = 'none'; }
 
@@ -509,7 +589,7 @@ body {
       if (confirmDelId === sale.id) {
         return `<div class="sale-card"><div class="confirm-del-box"><div class="confirm-del-txt">⚠️ حذف هذه العملية نهائياً؟</div><div class="confirm-row"><button class="btn-yes" onclick="window.doDelete('${sale.id}')">نعم، احذف</button><button class="btn-no" onclick="window.cancelDel()">إلغاء</button></div></div></div>`;
       }
-      return `<div class="sale-card"><div class="sale-top"><div><span class="sale-count">${sale.count.toLocaleString('ar-IQ')} طير</span><span class="sale-date">${sale.date}</span></div><div class="sale-actions"><button class="btn-edit" onclick="window.startEdit('${sale.id}')">✏️ تعديل</button><button class="btn-del" onclick="window.askDel('${sale.id}')">🗑️ حذف</button></div></div><div class="sale-grid"><div class="sale-cell"><div class="sc-val">${sale.avgWt} كغ</div><div class="sc-lbl">الوزن/طير</div></div><div class="sale-cell"><div class="sc-val">${fmt(sale.price)}</div><div class="sc-lbl">السعر/كغ</div></div><div class="sale-cell hi"><div class="sc-val">${fmt(sale.total)} د</div><div class="sc-lbl">الإجمالي</div></div></div>${sale.note ? `<div class="sale-note">📝 ${sale.note}</div>` : ''}</div>`;
+      return `<div class="sale-card"><div class="sale-top"><div><span class="sale-count">${fmt(sale.count)} طير</span><span class="sale-date">${sale.date}</span></div><div class="sale-actions"><button class="btn-edit" onclick="window.startEdit('${sale.id}')">✏️ تعديل</button><button class="btn-del" onclick="window.askDel('${sale.id}')">🗑️ حذف</button></div></div><div class="sale-grid"><div class="sale-cell"><div class="sc-val">${sale.avgWt} كغ</div><div class="sc-lbl">الوزن/طير</div></div><div class="sale-cell"><div class="sc-val">${fmt(sale.price)}</div><div class="sc-lbl">السعر/كغ</div></div><div class="sale-cell hi"><div class="sc-val">${fmt(sale.total)} د</div><div class="sc-lbl">الإجمالي</div></div></div>${sale.note ? `<div class="sale-note">📝 ${sale.note}</div>` : ''}</div>`;
     }).join('');
   }
 
@@ -517,10 +597,14 @@ body {
     const sale = sales.find(s => s.id === id);
     if (!sale) return;
     editId = id; selWt = String(sale.avgWt);
-    document.getElementById('inp-count').value = sale.count;
-    document.getElementById('inp-wt').value    = sale.avgWt;
-    document.getElementById('inp-pr').value    = sale.price;
-    document.getElementById('inp-total-guess').value = sale.total; // نملأ الحقل تلقائياً للتعديل
+    lastInputMode = 'avg'; // إعادة الضبط لمتوسط الوزن عند التعديل
+    
+    setFormattedInput('inp-count', sale.count, false);
+    setFormattedInput('inp-pr', sale.price, false);
+    setFormattedInput('inp-wt', sale.avgWt, true);
+    setFormattedInput('inp-total-wt', sale.totWt, true);
+    setFormattedInput('inp-total-amt', sale.total, false);
+    
     document.getElementById('inp-note').value  = sale.note || '';
     document.getElementById('edit-banner').style.display = 'flex';
     document.getElementById('btn-save').textContent = '💾 حفظ التعديل';
@@ -541,8 +625,8 @@ body {
   }
 
   function renderSettings() {
-    if(document.activeElement.id !== 'inp-flock') document.getElementById('inp-flock').value  = flock.initial || '';
-    if(document.activeElement.id !== 'inp-locked') document.getElementById('inp-locked').value = cfg.lockedPrice || '';
+    if(document.activeElement.id !== 'inp-flock') setFormattedInput('inp-flock', flock.initial, false);
+    if(document.activeElement.id !== 'inp-locked') setFormattedInput('inp-locked', cfg.lockedPrice, false);
     refreshLockedOk();
   }
 
@@ -555,10 +639,9 @@ body {
     cfg.lockedPrice = pN(v) || '';
     saveToFirebase('cfg', cfg);
     if (cfg.lockedPrice && !editId) { 
-      document.getElementById('inp-pr').value = cfg.lockedPrice; 
-      guessWeight(); 
+      setFormattedInput('inp-pr', cfg.lockedPrice, false);
+      onFormChange(); 
     }
-    onFormChange();
   }
 
   function refreshLockedOk() {
@@ -584,8 +667,7 @@ body {
 
   window.switchTab = switchTab;
   window.pickWt = pickWt;
-  window.onWtInput = onWtInput;
-  window.onFormChange = onFormChange;
+  window.handleTyping = handleTyping;
   window.useLocked = useLocked;
   window.resetForm = resetForm;
   window.doSave = doSave;
@@ -596,7 +678,6 @@ body {
   window.saveFlock = saveFlock;
   window.saveLockedPrice = saveLockedPrice;
   window.clearAll = clearAll;
-  window.guessWeight = guessWeight; // تصدير دالة الحساب الجديدة
 
 </script>
 </body>

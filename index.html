@@ -7,13 +7,7 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-  background: #EEF7EF;
-  min-height: 100vh;
-  direction: rtl;
-  padding-bottom: 30px;
-}
+body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; min-height: 100vh; direction: rtl; padding-bottom: 30px; }
 
 /* ─── Header ─── */
 .header { background: linear-gradient(145deg, #163d26 0%, #1e6b40 60%, #2e9957 100%); color: white; padding: 20px 16px 18px; }
@@ -31,8 +25,8 @@ body {
 .revenue-val { font-weight: 900; font-size: 17px; color: #fff; }
 
 /* ─── Tabs ─── */
-.tabs { background: #fff; display: flex; box-shadow: 0 3px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-.tab-btn { flex: 1; padding: 11px 0; font-size: 12.5px; background: none; cursor: pointer; border: none; border-bottom: 3px solid transparent; font-family: inherit; transition: all 0.2s; color: #aaa; }
+.tabs { background: #fff; display: flex; box-shadow: 0 3px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; overflow-x: auto; white-space: nowrap; }
+.tab-btn { flex: 1; padding: 11px 10px; font-size: 12.5px; background: none; cursor: pointer; border: none; border-bottom: 3px solid transparent; font-family: inherit; transition: all 0.2s; color: #aaa; min-width: 80px; }
 .tab-btn.active { color: #1e6b40; border-bottom-color: #1e6b40; font-weight: 800; }
 .tab-icon { display: block; font-size: 19px; margin-bottom: 1px; }
 
@@ -45,6 +39,13 @@ body {
 .big-input { width: 100%; text-align: center; border: 2.5px solid #ddeee2; border-radius: 14px; padding: 13px 10px; font-size: 28px; font-weight: 900; outline: none; color: #1a2e20; background: #fafcfb; transition: all 0.2s; font-family: inherit; -moz-appearance: textfield; }
 .big-input:focus { border-color: #1e6b40; background: #f3fbf5; }
 .note-input { width: 100%; border: none; outline: none; font-size: 14px; color: #555; background: transparent; text-align: right; font-family: inherit; padding: 2px 0; }
+
+/* ─── Fast Weighing Inputs (Native Number for speed) ─── */
+.fast-input { width: 100%; text-align: center; border: 2.5px solid #c0dfc9; border-radius: 12px; padding: 12px; font-size: 22px; font-weight: 800; outline: none; background: #fff; transition: 0.15s; font-family: inherit; -moz-appearance: textfield; }
+.fast-input:focus { border-color: #1e6b40; box-shadow: 0 0 0 3px rgba(30,107,64,0.1); }
+.fast-input::-webkit-inner-spin-button, .fast-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.dual-input-row { display: flex; gap: 8px; margin-top: 8px; }
+.dual-input-row .fast-input { font-size: 16px; background: #f9f9f9; border-color: #ddd; }
 
 /* ─── Weights ─── */
 .wt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
@@ -84,17 +85,26 @@ body {
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e6b40; color: #fff; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; }
 
-/* ─── History ─── */
+/* ─── Weighing List ─── */
+.weighing-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; text-align: center; }
+.weighing-table th { background: #f0f5f1; color: #5a7a60; padding: 8px; font-weight: 800; }
+.weighing-table td { padding: 8px; border-bottom: 1px solid #f0f5f1; }
+.weighing-table tr:last-child td { border-bottom: none; }
+.btn-w-add { width: 100%; padding: 14px; background: #2e9957; color: white; border: none; border-radius: 12px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; font-family: inherit; }
+.btn-w-add:active { transform: scale(0.98); }
+.btn-w-clear { width: 100%; padding: 10px; background: #fff3f3; color: #c62828; border: 1px solid #ffcdd2; border-radius: 10px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 8px; }
+.report-box { background: #fff; border: 2px dashed #2e9957; border-radius: 12px; padding: 16px; margin-top: 15px; text-align: right; line-height: 1.8; font-family: monospace; font-size: 14px; font-weight: 800; color: #111; display: none; }
+.btn-w-transfer { width: 100%; padding: 14px; background: #0056b3; color: white; border: none; border-radius: 12px; font-weight: 900; font-size: 16px; margin-top: 10px; cursor: pointer; font-family: inherit; display: none; }
+
+/* ─── History & Settings ─── */
 .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f0f5f1; }
 .summary-row:last-child { border-bottom: none; }
 .sum-lbl { color: #888; font-size: 14px; }
 .sum-val { font-weight: 900; font-size: 15px; }
-
 .estimator { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 16px; padding: 14px; border: 1.5px solid #90caf9; margin-bottom: 12px; }
 .est-title { font-weight: 800; color: #1565c0; font-size: 14px; margin-bottom: 6px; }
 .est-desc { color: #1976d2; font-size: 12px; line-height: 1.7; }
 .est-val { font-weight: 900; color: #0d47a1; font-size: 23px; margin-top: 6px; }
-
 .history-hdr { font-weight: 800; color: #333; font-size: 15px; margin-bottom: 12px; }
 .sale-card { background: #fff; border-radius: 18px; padding: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 10px; }
 .sale-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
@@ -110,19 +120,15 @@ body {
 .sale-cell.hi .sc-val { color: #1b6030; }
 .sc-lbl { font-size: 10px; color: #aaa; margin-top: 2px; }
 .sale-note { margin-top: 9px; font-size: 12px; color: #777; background: #f8f9fa; border-radius: 8px; padding: 5px 10px; }
-
 .confirm-del-box { text-align: center; padding: 4px 0; }
 .confirm-del-txt { color: #c62828; font-weight: 800; margin-bottom: 12px; font-size: 15px; }
 .confirm-row { display: flex; gap: 8px; }
 .btn-yes { flex: 1; padding: 12px; background: #c62828; color: #fff; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: inherit; }
 .btn-no  { flex: 1; padding: 12px; background: #eee; color: #444; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
-
 .empty-state { text-align: center; padding: 44px 20px; }
 .empty-icon { font-size: 54px; }
 .empty-txt { font-size: 15px; color: #bbb; margin-top: 10px; }
 .empty-sub { font-size: 12px; color: #ccc; margin-top: 5px; }
-
-/* ─── Settings ─── */
 .settings-desc { font-size: 12px; color: #aaa; line-height: 1.7; margin-bottom: 10px; }
 .locked-ok { text-align: center; color: #1b6030; font-weight: 800; font-size: 14px; margin-top: 10px; }
 .danger-zone { background: #fff3f3; border-radius: 18px; padding: 16px; border: 1.5px solid #ffcdd2; margin-bottom: 12px; }
@@ -160,6 +166,9 @@ body {
 </div>
 
 <div class="tabs">
+  <button class="tab-btn"        id="tab-weighing" onclick="window.switchTab('weighing')">
+    <span class="tab-icon">⚖️</span>الوزنات
+  </button>
   <button class="tab-btn active" id="tab-entry"   onclick="window.switchTab('entry')">
     <span class="tab-icon">➕</span>إدخال
   </button>
@@ -173,6 +182,55 @@ body {
 
 <div class="content">
 
+  <div id="panel-weighing" style="display:none">
+    
+    <div class="card" style="background: #e4f5e9; border: 1px solid #c0dfc9;">
+      <div class="card-lbl">📦 إعداد التعبئة</div>
+      <input class="fast-input" type="number" inputmode="numeric" id="w-chickens-per-cage"
+             placeholder="عدد الدجاج في القفص الواحد (مثال: 11)" value="11">
+    </div>
+
+    <div class="card">
+      <div class="card-lbl">⚡ إدخال الوزنات</div>
+      <div style="font-size:11px; color:#888; margin-bottom:8px;">أدخل الوزن المملوء واضغط إدخال (أو Enter). سيتم توريث الباقي تلقائياً.</div>
+      
+      <input class="fast-input" type="number" inputmode="decimal" id="w-full"
+             placeholder="الوزن المملوء (كغم)" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
+      
+      <div class="dual-input-row">
+        <input class="fast-input" type="number" inputmode="numeric" id="w-cages"
+               placeholder="الأقفاص (يورث تلقائياً)" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
+        <input class="fast-input" type="number" inputmode="decimal" id="w-empty"
+               placeholder="الفارغ (يورث تلقائياً)" onkeypress="if(event.key==='Enter') window.addWeightEntry()">
+      </div>
+      
+      <button class="btn-w-add" onclick="window.addWeightEntry()">أضف الوزنة ➕</button>
+    </div>
+
+    <div class="card">
+      <div class="card-lbl" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>📋 الوزنات المسجلة (<span id="w-count">0</span>)</span>
+        <button onclick="window.finalizeWeights()" style="background:#1e6b40; color:white; border:none; padding:5px 12px; border-radius:8px; cursor:pointer; font-family:inherit; font-weight:800;">تصفية 🧾</button>
+      </div>
+      
+      <table class="weighing-table">
+        <thead>
+          <tr>
+            <th>#</th><th>مملوء</th><th>أقفاص</th><th>فارغ</th><th>صافي</th>
+          </tr>
+        </thead>
+        <tbody id="w-tbody">
+          <tr><td colspan="5" style="color:#aaa;">لم يتم إضافة وزنات بعد</td></tr>
+        </tbody>
+      </table>
+      <button class="btn-w-clear" onclick="window.clearWeights()">مسح القائمة للبدء من جديد 🗑️</button>
+
+      <div id="w-report" class="report-box"></div>
+      <button id="btn-w-transfer" class="btn-w-transfer" onclick="window.transferToMainEntry()">تسجيل هذه القائمة كبيعة 💾</button>
+    </div>
+
+  </div>
+
   <div id="panel-entry">
     <div id="edit-banner" class="edit-banner" style="display:none">
       <span class="edit-banner-txt">✏️ وضع التعديل</span>
@@ -181,44 +239,36 @@ body {
 
     <div class="card">
       <div class="card-lbl">🐔 عدد الطيور</div>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-count"
-             placeholder="مثال: 450" oninput="window.handleTyping(this, false, null)">
+      <input class="big-input" type="text" inputmode="numeric" id="inp-count" placeholder="مثال: 450" oninput="window.handleTyping(this, false, null)">
     </div>
 
     <div class="card">
       <div class="card-lbl">💰 السعر (دينار عراقي / كغ)</div>
-      <button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">
-        🔒 السعر المقفّل — اضغط للاستخدام
-      </button>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-pr"
-             placeholder="مثال: 5,500" oninput="window.handleTyping(this, false, null)">
+      <button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">🔒 السعر المقفّل — اضغط للاستخدام</button>
+      <input class="big-input" type="text" inputmode="numeric" id="inp-pr" placeholder="مثال: 5,500" oninput="window.handleTyping(this, false, null)">
       <div class="price-hint" id="price-hint"></div>
     </div>
 
     <div class="card" style="background: #fffdf2; border: 1.5px solid #ffecb3;">
       <div class="card-lbl" style="color: #d4a000;">💵 المبلغ الإجمالي (دينار)</div>
-      <input class="big-input" style="background: #fffcf2; border-color: #ffe082;" type="text" inputmode="numeric" id="inp-total-amt"
-             placeholder="مثال: 4,500,000" oninput="window.handleTyping(this, false, 'amt')">
+      <input class="big-input" style="background: #fffcf2; border-color: #ffe082;" type="text" inputmode="numeric" id="inp-total-amt" placeholder="مثال: 4,500,000" oninput="window.handleTyping(this, false, 'amt')">
       <div style="font-size: 11px; color: #a67c00; text-align: center; margin-top: 6px;">يمكنك كتابة المبلغ هنا وسنستنتج الوزن تلقائياً</div>
     </div>
 
     <div class="card" style="background: #f2f9ff; border: 1.5px solid #b3d4ff;">
       <div class="card-lbl" style="color: #0056b3;">⚖️ الوزن الكلي (كغ)</div>
-      <input class="big-input" style="background: #f2f9ff; border-color: #99c2ff;" type="text" inputmode="decimal" id="inp-total-wt"
-             placeholder="مثال: 150" oninput="window.handleTyping(this, true, 'totWt')">
+      <input class="big-input" style="background: #f2f9ff; border-color: #99c2ff;" type="text" inputmode="decimal" id="inp-total-wt" placeholder="مثال: 150" oninput="window.handleTyping(this, true, 'totWt')">
       <div style="font-size: 11px; color: #004085; text-align: center; margin-top: 6px;">أو اكتب الوزن الكلي هنا وسنستنتج الباقي</div>
     </div>
 
     <div class="card">
       <div class="card-lbl">🐥 متوسط وزن الطير الواحد (كغ)</div>
       <div class="wt-grid" id="wt-grid"></div>
-      <input class="big-input" type="text" inputmode="decimal" id="inp-wt"
-             placeholder="وزن الطير..." oninput="window.handleTyping(this, true, 'avg')">
+      <input class="big-input" type="text" inputmode="decimal" id="inp-wt" placeholder="وزن الطير..." oninput="window.handleTyping(this, true, 'avg')">
     </div>
 
     <div class="card" style="padding:11px 16px">
-      <input class="note-input" type="text" id="inp-note"
-             placeholder="📝 ملاحظة اختيارية — مثال: باع أبو أحمد، دفعة المساء...">
+      <input class="note-input" type="text" id="inp-note" placeholder="📝 ملاحظة اختيارية — مثال: باع أبو أحمد، دفعة المساء...">
     </div>
 
     <div class="result-panel" id="result-panel" style="display:none">
@@ -239,36 +289,19 @@ body {
       <button class="btn-save" id="btn-save" onclick="window.doSave()" disabled>💾 حفظ العملية</button>
       <button class="btn-reset" onclick="window.resetForm()">🔄</button>
     </div>
-    <div class="hint-txt">جرّب الأرقام بحرية — فقط اضغط «حفظ» للعمليات الفعلية</div>
   </div>
 
   <div id="panel-history" style="display:none">
     <div class="card">
       <div class="card-lbl">📊 ملخص القطيع</div>
-      <div class="summary-row">
-        <span class="sum-lbl">العدد الابتدائي</span>
-        <span class="sum-val" id="s-initial" style="color:#333"></span>
-      </div>
-      <div class="summary-row">
-        <span class="sum-lbl">إجمالي المباع</span>
-        <span class="sum-val" id="s-sold" style="color:#d84315"></span>
-      </div>
-      <div class="summary-row">
-        <span class="sum-lbl">المتبقي في المزرعة</span>
-        <span class="sum-val" id="s-remaining" style="color:#1b6030"></span>
-      </div>
-      <div class="summary-row">
-        <span class="sum-lbl">إجمالي الإيراد المسجّل</span>
-        <span class="sum-val" id="s-revenue" style="color:#1565c0"></span>
-      </div>
+      <div class="summary-row"><span class="sum-lbl">العدد الابتدائي</span><span class="sum-val" id="s-initial" style="color:#333"></span></div>
+      <div class="summary-row"><span class="sum-lbl">إجمالي المباع</span><span class="sum-val" id="s-sold" style="color:#d84315"></span></div>
+      <div class="summary-row"><span class="sum-lbl">المتبقي في المزرعة</span><span class="sum-val" id="s-remaining" style="color:#1b6030"></span></div>
+      <div class="summary-row"><span class="sum-lbl">إجمالي الإيراد المسجّل</span><span class="sum-val" id="s-revenue" style="color:#1565c0"></span></div>
     </div>
-
     <div class="estimator" id="estimator" style="display:none">
-      <div class="est-title">🔮 تقدير قيمة المتبقي عند السعر المقفّل</div>
-      <div class="est-desc" id="est-desc"></div>
-      <div class="est-val"  id="est-val"></div>
+      <div class="est-title">🔮 تقدير قيمة المتبقي عند السعر المقفّل</div><div class="est-desc" id="est-desc"></div><div class="est-val" id="est-val"></div>
     </div>
-
     <div class="history-hdr" id="history-hdr"></div>
     <div id="sales-list"></div>
   </div>
@@ -276,19 +309,13 @@ body {
   <div id="panel-settings" style="display:none">
     <div class="card">
       <div class="card-lbl">🐔 إعداد القطيع</div>
-      <p class="settings-desc">العدد الكلي الابتدائي — يشمل المباع والكات وما تبقى في المزرعة</p>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-flock"
-             oninput="window.saveFlock(this.value); window.handleTyping(this, false, null)">
+      <input class="big-input" type="text" inputmode="numeric" id="inp-flock" oninput="window.saveFlock(this.value); window.handleTyping(this, false, null)">
     </div>
-
     <div class="card">
       <div class="card-lbl">🔒 تقفيل السعر الافتراضي</div>
-      <p class="settings-desc">يملأ حقل السعر تلقائياً عند كل إدخال جديد — ويمكن تجاوزه عند الحاجة</p>
-      <input class="big-input" type="text" inputmode="numeric" id="inp-locked"
-             placeholder="أدخل السعر د.ع/كغ..." oninput="window.saveLockedPrice(this.value); window.handleTyping(this, false, null)">
+      <input class="big-input" type="text" inputmode="numeric" id="inp-locked" placeholder="أدخل السعر د.ع/كغ..." oninput="window.saveLockedPrice(this.value); window.handleTyping(this, false, null)">
       <div class="locked-ok" id="locked-ok" style="display:none"></div>
     </div>
-
     <div class="danger-zone">
       <div class="danger-title">⚠️ منطقة الخطر</div>
       <button class="btn-danger" onclick="window.clearAll()">🗑️ حذف جميع سجلات البيع</button>
@@ -322,9 +349,12 @@ body {
   let editId  = null;
   let confirmDelId = null;
   let selWt   = '';
-  
-  // تتبع آخر حقل تم إدخال البيانات فيه لتجنب مسح بيانات المستخدم
-  let lastInputMode = 'avg'; // يمكن أن يكون 'amt' أو 'totWt' أو 'avg'
+  let lastInputMode = 'avg'; 
+
+  // متغيرات قبان التحميل (الذاكرة المؤقتة)
+  let wList = [];
+  let wLastCages = '';
+  let wLastEmpty = '';
 
   function saveToFirebase(key, val) { set(ref(db, 'farmData/' + key), val); }
 
@@ -335,28 +365,18 @@ body {
       sales = data.sales || [];
       cfg   = data.cfg || { lockedPrice: '' };
     } else {
-      flock = { initial: 17000 };
-      sales = [];
-      cfg   = { lockedPrice: '' };
+      flock = { initial: 17000 }; sales = []; cfg = { lockedPrice: '' };
     }
-    updateHeader();
-    renderWtBtns();
-    refreshLockedBtn();
-    renderHistory();
-    renderSettings();
+    updateHeader(); renderWtBtns(); refreshLockedBtn(); renderHistory(); renderSettings();
   });
 
-  // دالة تحويل الرقم وتجاهل الفوارز لتنفيذ العمليات الحسابية
   function pN(s) { return parseFloat(String(s ?? '').replace(/[,،\s]/g,'')) || 0; }
-  
-  // دالة تنسيق الأرقام مع إضافة الفوارز
   function fmt(n) {
     const v = Math.round(+n || 0);
     if (v >= 1e9) return (v/1e9).toFixed(1).replace(/\.0$/,'') + ' مليار';
     if (v >= 1e6) return (v/1e6).toFixed(1).replace(/\.0$/,'') + ' مليون';
     return v.toLocaleString('en-US');
   }
-
   function todayStr() { return new Date().toLocaleDateString('ar', { year:'numeric', month:'long', day:'numeric' }); }
   function derived() {
     const sold = sales.reduce((a,s) => a + s.count, 0);
@@ -369,19 +389,160 @@ body {
   }
 
   function switchTab(tab) {
-    ['entry','history','settings'].forEach(t => {
+    ['weighing','entry','history','settings'].forEach(t => {
       document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
       document.getElementById('tab-'   + t).classList.toggle('active', t === tab);
     });
-    if (tab === 'history')  renderHistory();
+    if (tab === 'history') renderHistory();
     if (tab === 'settings') renderSettings();
+    if (tab === 'weighing') document.getElementById('w-full').focus(); // تركيز فوري
   }
 
+  // ══════════════════════════════════════
+  //  نظام قبان التحميل (Weighing System)
+  // ══════════════════════════════════════
+  function addWeightEntry() {
+    const inpFull = document.getElementById('w-full');
+    const inpCages = document.getElementById('w-cages');
+    const inpEmpty = document.getElementById('w-empty');
+
+    let fw = pN(inpFull.value);
+    let cg = inpCages.value;
+    let ew = inpEmpty.value;
+
+    if (fw <= 0) { toast('❌ يرجى إدخال الوزن المملوء!'); inpFull.focus(); return; }
+
+    // قاعدة التوريث:
+    if (cg !== '') wLastCages = pN(cg);
+    if (ew !== '') wLastEmpty = pN(ew);
+
+    if (!wLastCages || !wLastEmpty) {
+      toast('⚠️ لأول وزنة، يجب كتابة عدد الأقفاص والوزن الفارغ!');
+      if (!wLastCages) inpCages.focus(); else inpEmpty.focus();
+      return;
+    }
+
+    const net = fw - wLastEmpty;
+    wList.push({ full: fw, cages: wLastCages, empty: wLastEmpty, net: net });
+
+    // الإدخال السريع: تصفير المملوء فقط والعودة إليه
+    inpFull.value = '';
+    inpCages.value = '';
+    inpEmpty.value = '';
+    inpFull.focus();
+
+    // إخفاء التقرير إن كان معروضاً (لأن هناك داتا جديدة)
+    document.getElementById('w-report').style.display = 'none';
+    document.getElementById('btn-w-transfer').style.display = 'none';
+
+    renderWeightsList();
+  }
+
+  function renderWeightsList() {
+    const tbody = document.getElementById('w-tbody');
+    document.getElementById('w-count').textContent = wList.length;
+
+    if (wList.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color:#aaa;">لم يتم إضافة وزنات بعد</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = wList.map((w, idx) => `
+      <tr>
+        <td style="font-weight:bold;">${idx + 1}</td>
+        <td style="color:#1e6b40;">${w.full}</td>
+        <td>${w.cages}</td>
+        <td>${w.empty}</td>
+        <td style="font-weight:900; color:#c62828;">${w.net.toFixed(2)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function clearWeights() {
+    if(!confirm("هل تريد مسح جميع الوزنات والبدء من جديد؟")) return;
+    wList = []; wLastCages = ''; wLastEmpty = '';
+    document.getElementById('w-report').style.display = 'none';
+    document.getElementById('btn-w-transfer').style.display = 'none';
+    document.getElementById('w-full').value = '';
+    document.getElementById('w-cages').value = '';
+    document.getElementById('w-empty').value = '';
+    renderWeightsList();
+    toast('🗑️ تم مسح القائمة');
+  }
+
+  function finalizeWeights() {
+    if (wList.length === 0) return toast('⚠️ لا توجد وزنات لتصفيتها!');
+
+    let cpc = pN(document.getElementById('w-chickens-per-cage').value);
+    if (cpc <= 0) return toast('⚠️ يرجى تحديد إعداد التعبئة (عدد الدجاج في القفص)');
+
+    let totFull = wList.reduce((a, b) => a + b.full, 0);
+    let totEmpty = wList.reduce((a, b) => a + b.empty, 0);
+    let totCages = wList.reduce((a, b) => a + b.cages, 0);
+
+    let netWeight = totFull - totEmpty;
+    let totalChicks = totCages * cpc;
+    let avgWt = totalChicks > 0 ? (netWeight / totalChicks) : 0;
+
+    // طباعة التقرير بالتنسيق المطلوب حصراً
+    const reportHTML = `📊 تصفية القائمة:<br>
+إجمالي الأقفاص: ${totCages} قفص<br>
+إجمالي الدجاج: ${totalChicks} دجاجة<br>
+الوزن المملوء الكلي: ${totFull.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
+الوزن الفارغ الكلي: ${totEmpty.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
+الوزن الصافي (اللحم): ${netWeight.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
+معدل وزن الدجاجة: ${avgWt.toFixed(3).replace(/\.?0+$/,'')} كغم`;
+
+    const repBox = document.getElementById('w-report');
+    repBox.innerHTML = reportHTML;
+    repBox.style.display = 'block';
+    document.getElementById('btn-w-transfer').style.display = 'block';
+  }
+
+  function transferToMainEntry() {
+    let cpc = pN(document.getElementById('w-chickens-per-cage').value);
+    let totFull = wList.reduce((a, b) => a + b.full, 0);
+    let totEmpty = wList.reduce((a, b) => a + b.empty, 0);
+    let totCages = wList.reduce((a, b) => a + b.cages, 0);
+
+    let netWeight = totFull - totEmpty;
+    let totalChicks = totCages * cpc;
+    let avgWt = netWeight / totalChicks;
+
+    // تعبئة خانة الإدخال
+    setFormattedInput('inp-count', totalChicks, false);
+    setFormattedInput('inp-total-wt', netWeight, true);
+    setFormattedInput('inp-wt', avgWt, true);
+    
+    // إضافة ملاحظة تلقائية
+    document.getElementById('inp-note').value = `تم ترحيلها من قبان التحميل (${wList.length} وزنات - أقفاص: ${totCages})`;
+
+    lastInputMode = 'totWt'; // لإجبار النظام على احترام الوزن الكلي عند إدخال السعر لاحقاً
+    onFormChange('totWt');
+    
+    switchTab('entry');
+    
+    // يمكنه التركيز على حقل السعر تلقائياً
+    if(!document.getElementById('inp-pr').value) document.getElementById('inp-pr').focus();
+
+    toast("✅ تم إدراج القائمة! أكمل السعر ثم اضغط حفظ");
+    
+    // مسح الذاكرة لتجهيزها لسيارة أخرى
+    wList = []; wLastCages = ''; wLastEmpty = '';
+    renderWeightsList();
+    document.getElementById('w-report').style.display = 'none';
+    document.getElementById('btn-w-transfer').style.display = 'none';
+  }
+
+
+  // ══════════════════════════════════════
+  // UI & General Logic
+  // ══════════════════════════════════════
   function updateHeader() {
     const d = derived();
-    document.getElementById('h-initial').textContent   = flock.initial.toLocaleString('en-US');
-    document.getElementById('h-sold').textContent      = d.sold.toLocaleString('en-US');
-    document.getElementById('h-remaining').textContent = d.remaining.toLocaleString('en-US');
+    document.getElementById('h-initial').textContent   = fmt(flock.initial);
+    document.getElementById('h-sold').textContent      = fmt(d.sold);
+    document.getElementById('h-remaining').textContent = fmt(d.remaining);
     document.getElementById('h-revenue').textContent   = fmt(d.revenue);
   }
 
@@ -395,23 +556,16 @@ body {
     selWt = String(w); 
     document.getElementById('inp-wt').value = w; 
     renderWtBtns(); 
-    onFormChange('avg'); // تحديث الباقي بناءً على متوسط الوزن
+    onFormChange('avg');
   }
 
-  // ══════════════════════════════════════
-  // دالة الإدخال الذكية (إضافة الفوارز والتحكم بالرياضيات)
-  // ══════════════════════════════════════
   function handleTyping(el, allowDecimal, mode) {
     let val = el.value;
-    // حذف أي نصوص مبدئياً والسماح بالنقطة إن كان الرقم عشري
     val = allowDecimal ? val.replace(/[^0-9.]/g, '') : val.replace(/[^0-9]/g, '');
-    
     if(allowDecimal) {
       const parts = val.split('.');
       if(parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
     }
-    
-    // وضع الفوارز للآلاف
     if(val !== '') {
       if(allowDecimal && val.includes('.')) {
         let parts = val.split('.');
@@ -420,19 +574,11 @@ body {
       } else {
         el.value = parseInt(val, 10).toLocaleString('en-US');
       }
-    } else {
-      el.value = '';
-    }
+    } else { el.value = ''; }
     
-    // تنفيذ الحسابات
-    if(mode) {
-       onFormChange(mode);
-    } else {
-       onFormChange(); // الحفاظ على النمط الأخير
-    }
+    if(mode) onFormChange(mode); else onFormChange();
   }
 
-  // المساعد لتعبئة الحقول من الكود بعد الحساب
   function setFormattedInput(id, val, allowDecimal) {
     if(!val || val === 0) { document.getElementById(id).value = ''; return; }
     let v = String(val);
@@ -448,54 +594,29 @@ body {
 
   function onFormChange(newMode) {
     if(newMode) lastInputMode = newMode;
-
     let cn = pN(document.getElementById('inp-count').value);
     let pr = pN(document.getElementById('inp-pr').value);
-    
     let amt = pN(document.getElementById('inp-total-amt').value);
     let totWt = pN(document.getElementById('inp-total-wt').value);
     let avgWt = pN(document.getElementById('inp-wt').value);
 
-    // المنطق الذكي للحساب
     if (lastInputMode === 'amt' && amt > 0) {
-      if (pr > 0) {
-        totWt = amt / pr;
-        setFormattedInput('inp-total-wt', totWt, true);
-      }
-      if (cn > 0 && totWt > 0) {
-        avgWt = totWt / cn;
-        setFormattedInput('inp-wt', avgWt, true);
-        selWt = ''; renderWtBtns();
-      }
-    } 
-    else if (lastInputMode === 'totWt' && totWt > 0) {
-      if (pr > 0) {
-        amt = totWt * pr;
-        setFormattedInput('inp-total-amt', amt, false);
-      }
+      if (pr > 0) { totWt = amt / pr; setFormattedInput('inp-total-wt', totWt, true); }
+      if (cn > 0 && totWt > 0) { avgWt = totWt / cn; setFormattedInput('inp-wt', avgWt, true); selWt = ''; renderWtBtns(); }
+    } else if (lastInputMode === 'totWt' && totWt > 0) {
+      if (pr > 0) { amt = totWt * pr; setFormattedInput('inp-total-amt', amt, false); }
+      if (cn > 0) { avgWt = totWt / cn; setFormattedInput('inp-wt', avgWt, true); selWt = ''; renderWtBtns(); }
+    } else if (lastInputMode === 'avg' && avgWt > 0) {
       if (cn > 0) {
-        avgWt = totWt / cn;
-        setFormattedInput('inp-wt', avgWt, true);
-        selWt = ''; renderWtBtns();
-      }
-    }
-    else if (lastInputMode === 'avg' && avgWt > 0) {
-      if (cn > 0) {
-        totWt = cn * avgWt;
-        setFormattedInput('inp-total-wt', totWt, true);
-        if (pr > 0) {
-          amt = totWt * pr;
-          setFormattedInput('inp-total-amt', amt, false);
-        }
+        totWt = cn * avgWt; setFormattedInput('inp-total-wt', totWt, true);
+        if (pr > 0) { amt = totWt * pr; setFormattedInput('inp-total-amt', amt, false); }
       }
     }
 
-    // تلميح السعر وقفل السعر
     document.getElementById('price-hint').textContent = pr > 0 ? `= ${fmt(pr)} دينار عراقي لكل كيلوغرام` : '';
     const lb = document.getElementById('locked-btn');
     if (lb.style.display !== 'none') lb.classList.toggle('used', String(pN(cfg.lockedPrice)) === String(pr) && pr > 0);
 
-    // تحديث النتيجة وزر الحفظ
     const canCalc = cn > 0 && avgWt > 0 && pr > 0;
     document.getElementById('btn-save').disabled = !canCalc;
 
@@ -505,17 +626,12 @@ body {
       document.getElementById('r-formula').textContent = `${fmt(cn)} طير × ${avgWt.toFixed(3).replace(/\.?0+$/,'')} كغ × ${fmt(pr)} د/كغ`;
       document.getElementById('r-wt').textContent  = fmt(totWt) + ' كغ';
       document.getElementById('r-amt').textContent = fmt(amt) + ' د.ع';
-    } else {
-      rp.style.display = 'none';
-    }
+    } else { rp.style.display = 'none'; }
   }
 
   function useLocked() {
     const lp = cfg.lockedPrice;
-    if (lp) { 
-      setFormattedInput('inp-pr', lp, false);
-      onFormChange(); 
-    }
+    if (lp) { setFormattedInput('inp-pr', lp, false); onFormChange(); }
   }
 
   function resetForm() {
@@ -525,14 +641,10 @@ body {
     document.getElementById('inp-total-wt').value = '';
     document.getElementById('inp-total-amt').value = '';
     document.getElementById('inp-note').value  = '';
-    
-    if (cfg.lockedPrice) setFormattedInput('inp-pr', cfg.lockedPrice, false);
-    else document.getElementById('inp-pr').value = '';
-    
+    if (cfg.lockedPrice) setFormattedInput('inp-pr', cfg.lockedPrice, false); else document.getElementById('inp-pr').value = '';
     document.getElementById('edit-banner').style.display = 'none';
     document.getElementById('btn-save').textContent = '💾 حفظ العملية';
-    renderWtBtns();
-    onFormChange();
+    renderWtBtns(); onFormChange();
   }
 
   function doSave() {
@@ -541,26 +653,13 @@ body {
     const pn = pN(document.getElementById('inp-pr').value);
     if (!cn || !wn || !pn) return;
 
-    const totWt = cn * wn;
-    const sale  = {
-      id:    editId || Date.now().toString(),
-      date:  todayStr(),
-      count: cn, avgWt: wn, price: pn,
-      totWt, total: totWt * pn,
-      note:  document.getElementById('inp-note').value.trim()
-    };
+    const totWt = pN(document.getElementById('inp-total-wt').value) || (cn * wn); // نأخذ الوزن الكلي المكتوب لتفادي الكسور
+    const sale  = { id: editId || Date.now().toString(), date: todayStr(), count: cn, avgWt: wn, price: pn, totWt, total: totWt * pn, note: document.getElementById('inp-note').value.trim() };
 
-    if (editId) {
-      sales = sales.map(s => s.id === editId ? sale : s);
-      toast('✅ تم حفظ التعديل');
-    } else {
-      sales.push(sale);
-      toast('✅ تم حفظ العملية');
-    }
+    if (editId) { sales = sales.map(s => s.id === editId ? sale : s); toast('✅ تم حفظ التعديل'); } 
+    else { sales.push(sale); toast('✅ تم حفظ العملية'); }
     
-    saveToFirebase('sales', sales); 
-    resetForm();
-    switchTab('history');
+    saveToFirebase('sales', sales); resetForm(); switchTab('history');
   }
 
   function renderHistory() {
@@ -573,111 +672,54 @@ body {
     const lp = pN(cfg.lockedPrice);
     const eb = document.getElementById('estimator');
     if (d.remaining > 0 && lp > 0) {
-      eb.style.display = '';
-      document.getElementById('est-desc').textContent = `المتبقي: ${fmt(d.remaining)} طير — بمتوسط وزن 1.8 كغ على ${fmt(lp)} د/كغ:`;
+      eb.style.display = ''; document.getElementById('est-desc').textContent = `المتبقي: ${fmt(d.remaining)} طير — بمتوسط وزن 1.8 كغ على ${fmt(lp)} د/كغ:`;
       document.getElementById('est-val').textContent = '≈ ' + fmt(d.remaining * 1.8 * lp) + ' دينار';
     } else { eb.style.display = 'none'; }
 
     document.getElementById('history-hdr').textContent = `عمليات البيع (${sales.length})`;
     const list = document.getElementById('sales-list');
-    if (sales.length === 0) {
-      list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-txt">لا توجد عمليات محفوظة</div><div class="empty-sub">اذهب لتبويب الإدخال وابدأ التسجيل</div></div>`;
-      return;
-    }
+    if (sales.length === 0) { list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-txt">لا توجد عمليات محفوظة</div><div class="empty-sub">اذهب لتبويب الإدخال وابدأ التسجيل</div></div>`; return; }
 
     list.innerHTML = [...sales].reverse().map(sale => {
       if (confirmDelId === sale.id) {
         return `<div class="sale-card"><div class="confirm-del-box"><div class="confirm-del-txt">⚠️ حذف هذه العملية نهائياً؟</div><div class="confirm-row"><button class="btn-yes" onclick="window.doDelete('${sale.id}')">نعم، احذف</button><button class="btn-no" onclick="window.cancelDel()">إلغاء</button></div></div></div>`;
       }
-      return `<div class="sale-card"><div class="sale-top"><div><span class="sale-count">${fmt(sale.count)} طير</span><span class="sale-date">${sale.date}</span></div><div class="sale-actions"><button class="btn-edit" onclick="window.startEdit('${sale.id}')">✏️ تعديل</button><button class="btn-del" onclick="window.askDel('${sale.id}')">🗑️ حذف</button></div></div><div class="sale-grid"><div class="sale-cell"><div class="sc-val">${sale.avgWt} كغ</div><div class="sc-lbl">الوزن/طير</div></div><div class="sale-cell"><div class="sc-val">${fmt(sale.price)}</div><div class="sc-lbl">السعر/كغ</div></div><div class="sale-cell hi"><div class="sc-val">${fmt(sale.total)} د</div><div class="sc-lbl">الإجمالي</div></div></div>${sale.note ? `<div class="sale-note">📝 ${sale.note}</div>` : ''}</div>`;
+      return `<div class="sale-card"><div class="sale-top"><div><span class="sale-count">${fmt(sale.count)} طير</span><span class="sale-date">${sale.date}</span></div><div class="sale-actions"><button class="btn-edit" onclick="window.startEdit('${sale.id}')">✏️ تعديل</button><button class="btn-del" onclick="window.askDel('${sale.id}')">🗑️ حذف</button></div></div><div class="sale-grid"><div class="sale-cell"><div class="sc-val">${Number(sale.avgWt).toFixed(3).replace(/\.?0+$/,'')} كغ</div><div class="sc-lbl">الوزن/طير</div></div><div class="sale-cell"><div class="sc-val">${fmt(sale.price)}</div><div class="sc-lbl">السعر/كغ</div></div><div class="sale-cell hi"><div class="sc-val">${fmt(sale.total)} د</div><div class="sc-lbl">الإجمالي</div></div></div>${sale.note ? `<div class="sale-note">📝 ${sale.note}</div>` : ''}</div>`;
     }).join('');
   }
 
   function startEdit(id) {
     const sale = sales.find(s => s.id === id);
     if (!sale) return;
-    editId = id; selWt = String(sale.avgWt);
-    lastInputMode = 'avg'; // إعادة الضبط لمتوسط الوزن عند التعديل
-    
-    setFormattedInput('inp-count', sale.count, false);
-    setFormattedInput('inp-pr', sale.price, false);
-    setFormattedInput('inp-wt', sale.avgWt, true);
-    setFormattedInput('inp-total-wt', sale.totWt, true);
-    setFormattedInput('inp-total-amt', sale.total, false);
-    
-    document.getElementById('inp-note').value  = sale.note || '';
-    document.getElementById('edit-banner').style.display = 'flex';
-    document.getElementById('btn-save').textContent = '💾 حفظ التعديل';
-    renderWtBtns();
-    onFormChange();
-    switchTab('entry');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    editId = id; selWt = String(sale.avgWt); lastInputMode = 'totWt'; // الأولوية للوزن الكلي القديم
+    setFormattedInput('inp-count', sale.count, false); setFormattedInput('inp-pr', sale.price, false); setFormattedInput('inp-wt', sale.avgWt, true); setFormattedInput('inp-total-wt', sale.totWt, true); setFormattedInput('inp-total-amt', sale.total, false);
+    document.getElementById('inp-note').value  = sale.note || ''; document.getElementById('edit-banner').style.display = 'flex'; document.getElementById('btn-save').textContent = '💾 حفظ التعديل';
+    renderWtBtns(); onFormChange(); switchTab('entry'); window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function askDel(id)  { confirmDelId = id; renderHistory(); }
   function cancelDel() { confirmDelId = null; renderHistory(); }
-
-  function doDelete(id) {
-    sales = sales.filter(s => s.id !== id);
-    saveToFirebase('sales', sales); 
-    confirmDelId = null;
-    toast('🗑️ تم حذف العملية');
-  }
+  function doDelete(id) { sales = sales.filter(s => s.id !== id); saveToFirebase('sales', sales); confirmDelId = null; toast('🗑️ تم حذف العملية'); }
 
   function renderSettings() {
     if(document.activeElement.id !== 'inp-flock') setFormattedInput('inp-flock', flock.initial, false);
     if(document.activeElement.id !== 'inp-locked') setFormattedInput('inp-locked', cfg.lockedPrice, false);
     refreshLockedOk();
   }
+  function saveFlock(v) { flock.initial = pN(v) || 0; saveToFirebase('flock', flock); }
+  function saveLockedPrice(v) { cfg.lockedPrice = pN(v) || ''; saveToFirebase('cfg', cfg); if (cfg.lockedPrice && !editId) { setFormattedInput('inp-pr', cfg.lockedPrice, false); onFormChange(); } }
+  function refreshLockedOk() { const lp = pN(cfg.lockedPrice); const el = document.getElementById('locked-ok'); if (lp > 0) { el.style.display=''; el.textContent = `✅ السعر المقفّل: ${fmt(lp)} دينار/كغ`; } else { el.style.display='none'; } }
+  function refreshLockedBtn() { const lb = document.getElementById('locked-btn'); const lp = cfg.lockedPrice; if (lp) { lb.style.display = ''; lb.textContent = `🔒 السعر المقفّل: ${fmt(lp)} د.ع / كغ — اضغط للاستخدام`; } else { lb.style.display = 'none'; } }
+  function clearAll() { if (!confirm('هل أنت متأكد من حذف جميع عمليات البيع المسجّلة؟\nلا يمكن التراجع عن هذا الإجراء.')) return; sales = []; saveToFirebase('sales', sales); toast('🗑️ تم حذف جميع السجلات'); }
 
-  function saveFlock(v) {
-    flock.initial = pN(v) || 0;
-    saveToFirebase('flock', flock);
-  }
-
-  function saveLockedPrice(v) {
-    cfg.lockedPrice = pN(v) || '';
-    saveToFirebase('cfg', cfg);
-    if (cfg.lockedPrice && !editId) { 
-      setFormattedInput('inp-pr', cfg.lockedPrice, false);
-      onFormChange(); 
-    }
-  }
-
-  function refreshLockedOk() {
-    const lp = pN(cfg.lockedPrice);
-    const el = document.getElementById('locked-ok');
-    if (lp > 0) { el.style.display=''; el.textContent = `✅ السعر المقفّل: ${fmt(lp)} دينار/كغ`; }
-    else { el.style.display='none'; }
-  }
-
-  function refreshLockedBtn() {
-    const lb = document.getElementById('locked-btn');
-    const lp = cfg.lockedPrice;
-    if (lp) { lb.style.display = ''; lb.textContent = `🔒 السعر المقفّل: ${fmt(lp)} د.ع / كغ — اضغط للاستخدام`; } 
-    else { lb.style.display = 'none'; }
-  }
-
-  function clearAll() {
-    if (!confirm('هل أنت متأكد من حذف جميع عمليات البيع المسجّلة؟\nلا يمكن التراجع عن هذا الإجراء.')) return;
-    sales = [];
-    saveToFirebase('sales', sales);
-    toast('🗑️ تم حذف جميع السجلات');
-  }
-
-  window.switchTab = switchTab;
-  window.pickWt = pickWt;
-  window.handleTyping = handleTyping;
-  window.useLocked = useLocked;
-  window.resetForm = resetForm;
-  window.doSave = doSave;
-  window.startEdit = startEdit;
-  window.askDel = askDel;
-  window.cancelDel = cancelDel;
-  window.doDelete = doDelete;
-  window.saveFlock = saveFlock;
-  window.saveLockedPrice = saveLockedPrice;
-  window.clearAll = clearAll;
+  // Expose global methods
+  window.switchTab = switchTab; window.pickWt = pickWt; window.handleTyping = handleTyping; window.useLocked = useLocked; window.resetForm = resetForm; window.doSave = doSave; window.startEdit = startEdit; window.askDel = askDel; window.cancelDel = cancelDel; window.doDelete = doDelete; window.saveFlock = saveFlock; window.saveLockedPrice = saveLockedPrice; window.clearAll = clearAll;
+  
+  // Expose Weighing methods
+  window.addWeightEntry = addWeightEntry;
+  window.finalizeWeights = finalizeWeights;
+  window.clearWeights = clearWeights;
+  window.transferToMainEntry = transferToMainEntry;
 
 </script>
 </body>

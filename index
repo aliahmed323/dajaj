@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🐔 حاسبة مزرعة الدجاج</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  background: #EEF7EF;
+  min-height: 100vh;
+  direction: rtl;
+  padding-bottom: 30px;
+}
+
+/* ─── Header ─── */
+.header { background: linear-gradient(145deg, #163d26 0%, #1e6b40 60%, #2e9957 100%); color: white; padding: 20px 16px 18px; }
+.header-top { text-align: center; margin-bottom: 16px; }
+.header-emoji { font-size: 36px; line-height: 1; }
+.header-title { font-size: 21px; font-weight: 900; margin-top: 5px; letter-spacing: 0.5px; }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px; margin-bottom: 12px; }
+.stat-box { border-radius: 15px; padding: 11px 6px; text-align: center; }
+.stat-val { font-size: 22px; font-weight: 900; color: #fff; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-sub { font-size: 10px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+.stat-lbl { font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 1px; }
+
+.revenue-bar { text-align: center; font-size: 13px; color: rgba(255,255,255,0.78); }
+.revenue-val { font-weight: 900; font-size: 17px; color: #fff; }
+
+/* ─── Tabs ─── */
+.tabs { background: #fff; display: flex; box-shadow: 0 3px 12px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+.tab-btn { flex: 1; padding: 11px 0; font-size: 12.5px; background: none; cursor: pointer; border: none; border-bottom: 3px solid transparent; font-family: inherit; transition: all 0.2s; color: #aaa; }
+.tab-btn.active { color: #1e6b40; border-bottom-color: #1e6b40; font-weight: 800; }
+.tab-icon { display: block; font-size: 19px; margin-bottom: 1px; }
+
+/* ─── Content & Cards ─── */
+.content { padding: 14px 13px; max-width: 520px; margin: 0 auto; }
+.card { background: #fff; border-radius: 20px; padding: 14px 16px; box-shadow: 0 2px 14px rgba(0,0,0,0.07); margin-bottom: 12px; }
+.card-lbl { font-size: 13px; font-weight: 700; color: #5a7a60; margin-bottom: 10px; }
+
+/* ─── Inputs ─── */
+.big-input { width: 100%; text-align: center; border: 2.5px solid #ddeee2; border-radius: 14px; padding: 13px 10px; font-size: 28px; font-weight: 900; outline: none; color: #1a2e20; background: #fafcfb; transition: all 0.2s; font-family: inherit; -moz-appearance: textfield; }
+.big-input::-webkit-inner-spin-button, .big-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.big-input:focus { border-color: #1e6b40; background: #f3fbf5; }
+.note-input { width: 100%; border: none; outline: none; font-size: 14px; color: #555; background: transparent; text-align: right; font-family: inherit; padding: 2px 0; }
+
+/* ─── Weights ─── */
+.wt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+.wt-btn { padding: 11px 4px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; background: #edf7ef; color: #2a7a45; border: 2px solid #c0dfc9; transition: all 0.15s; font-family: inherit; }
+.wt-btn.active { background: #1e6b40; color: #fff; border-color: transparent; transform: scale(0.96); box-shadow: 0 3px 10px rgba(30,107,64,0.35); }
+
+/* ─── Misc ─── */
+.locked-btn { width: 100%; padding: 10px 12px; margin-bottom: 10px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 800; background: #f5f5f5; border: 2px solid #ddd; color: #1e6b40; transition: all 0.18s; text-align: center; }
+.locked-btn.used { background: #e4f5e9; border-color: #2e9957; }
+.price-hint { text-align: center; font-size: 12px; color: #999; margin-top: 7px; min-height: 18px; }
+
+/* ─── Results ─── */
+.result-panel { background: linear-gradient(140deg, #163d26 0%, #1e6b40 100%); border-radius: 20px; padding: 16px 14px; margin-bottom: 12px; box-shadow: 0 8px 26px rgba(22,61,38,0.38); animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.result-formula { text-align: center; font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.result-item { border-radius: 14px; padding: 13px 8px; text-align: center; }
+.result-item.n { background: rgba(255,255,255,0.15); }
+.result-item.g { background: rgba(255,215,0,0.22); }
+.result-val { font-size: 20px; font-weight: 900; color: #fff; }
+.result-item.g .result-val { color: #ffd700; }
+.result-lbl { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 3px; }
+
+/* ─── Buttons ─── */
+.btn-row { display: flex; gap: 10px; margin-bottom: 8px; }
+.btn-save { flex: 1; padding: 16px; border-radius: 18px; font-weight: 900; font-size: 18px; background: #1e6b40; color: #fff; border: none; cursor: pointer; box-shadow: 0 5px 20px rgba(30,107,64,0.45); transition: all 0.2s; font-family: inherit; }
+.btn-save:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+.btn-save:not(:disabled):active { transform: scale(0.97); }
+.btn-reset { padding: 16px 19px; border-radius: 18px; background: #e6f4eb; color: #2e9957; border: 2px solid #c0dfc9; cursor: pointer; font-size: 21px; font-family: inherit; transition: all 0.15s; }
+.btn-reset:active { transform: scale(0.95); }
+.hint-txt { text-align: center; font-size: 11px; color: #c0c0c0; margin-bottom: 4px; }
+
+/* ─── UI States ─── */
+.edit-banner { background: #fff8e1; border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; border: 1.5px solid #ffe082; margin-bottom: 12px; }
+.edit-banner-txt { color: #a07010; font-size: 14px; font-weight: 800; }
+.edit-cancel { color: #a07010; font-size: 13px; background: none; border: none; cursor: pointer; font-family: inherit; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e6b40; color: #fff; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+.toast.show { opacity: 1; }
+
+/* ─── History ─── */
+.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid #f0f5f1; }
+.summary-row:last-child { border-bottom: none; }
+.sum-lbl { color: #888; font-size: 14px; }
+.sum-val { font-weight: 900; font-size: 15px; }
+
+.estimator { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-radius: 16px; padding: 14px; border: 1.5px solid #90caf9; margin-bottom: 12px; }
+.est-title { font-weight: 800; color: #1565c0; font-size: 14px; margin-bottom: 6px; }
+.est-desc { color: #1976d2; font-size: 12px; line-height: 1.7; }
+.est-val { font-weight: 900; color: #0d47a1; font-size: 23px; margin-top: 6px; }
+
+.history-hdr { font-weight: 800; color: #333; font-size: 15px; margin-bottom: 12px; }
+.sale-card { background: #fff; border-radius: 18px; padding: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); margin-bottom: 10px; }
+.sale-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.sale-count { font-weight: 900; font-size: 17px; color: #1a2e20; }
+.sale-date { font-size: 11px; color: #bbb; margin-right: 8px; }
+.sale-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.btn-edit { font-size: 11px; padding: 5px 11px; background: #fff8e1; color: #e67e00; border: 1.5px solid #ffe082; border-radius: 9px; cursor: pointer; font-weight: 800; font-family: inherit; }
+.btn-del { font-size: 11px; padding: 5px 11px; background: #ffebee; color: #c62828; border: 1.5px solid #ffcdd2; border-radius: 9px; cursor: pointer; font-weight: 800; font-family: inherit; }
+.sale-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.sale-cell { background: #f7fbf8; border-radius: 11px; padding: 9px 4px; text-align: center; }
+.sale-cell.hi { background: #e4f5e9; }
+.sc-val { font-weight: 900; font-size: 13px; color: #333; }
+.sale-cell.hi .sc-val { color: #1b6030; }
+.sc-lbl { font-size: 10px; color: #aaa; margin-top: 2px; }
+.sale-note { margin-top: 9px; font-size: 12px; color: #777; background: #f8f9fa; border-radius: 8px; padding: 5px 10px; }
+
+.confirm-del-box { text-align: center; padding: 4px 0; }
+.confirm-del-txt { color: #c62828; font-weight: 800; margin-bottom: 12px; font-size: 15px; }
+.confirm-row { display: flex; gap: 8px; }
+.btn-yes { flex: 1; padding: 12px; background: #c62828; color: #fff; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-family: inherit; }
+.btn-no  { flex: 1; padding: 12px; background: #eee; color: #444; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+.empty-state { text-align: center; padding: 44px 20px; }
+.empty-icon { font-size: 54px; }
+.empty-txt { font-size: 15px; color: #bbb; margin-top: 10px; }
+.empty-sub { font-size: 12px; color: #ccc; margin-top: 5px; }
+
+/* ─── Settings ─── */
+.settings-desc { font-size: 12px; color: #aaa; line-height: 1.7; margin-bottom: 10px; }
+.locked-ok { text-align: center; color: #1b6030; font-weight: 800; font-size: 14px; margin-top: 10px; }
+.danger-zone { background: #fff3f3; border-radius: 18px; padding: 16px; border: 1.5px solid #ffcdd2; margin-bottom: 12px; }
+.danger-title { color: #c62828; font-weight: 900; font-size: 15px; margin-bottom: 12px; }
+.btn-danger { width: 100%; padding: 14px; background: #c62828; color: #fff; border: none; border-radius: 14px; font-weight: 900; font-size: 15px; cursor: pointer; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="header-emoji">🐔</div>
+    <div class="header-title">حاسبة مزرعة الدجاج</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-box" style="background:rgba(255,255,255,0.17)">
+      <div class="stat-val" id="h-initial">0</div>
+      <div class="stat-sub">طير</div>
+      <div class="stat-lbl">القطيع الكلي</div>
+    </div>
+    <div class="stat-box" style="background:rgba(230,130,0,0.5)">
+      <div class="stat-val" id="h-sold">0</div>
+      <div class="stat-sub">طير</div>
+      <div class="stat-lbl">المُباع</div>
+    </div>
+    <div class="stat-box" style="background:rgba(0,200,90,0.32)">
+      <div class="stat-val" id="h-remaining">0</div>
+      <div class="stat-sub">طير</div>
+      <div class="stat-lbl">المُتبقّي</div>
+    </div>
+  </div>
+  <div class="revenue-bar">
+    إجمالي الإيراد المسجّل:&nbsp;<span class="revenue-val" id="h-revenue">0</span>&nbsp;د.ع
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" id="tab-entry"   onclick="window.switchTab('entry')">
+    <span class="tab-icon">➕</span>إدخال
+  </button>
+  <button class="tab-btn"        id="tab-history" onclick="window.switchTab('history')">
+    <span class="tab-icon">📋</span>السجل
+  </button>
+  <button class="tab-btn"        id="tab-settings"onclick="window.switchTab('settings')">
+    <span class="tab-icon">⚙️</span>الإعدادات
+  </button>
+</div>
+
+<div class="content">
+
+  <div id="panel-entry">
+    <div id="edit-banner" class="edit-banner" style="display:none">
+      <span class="edit-banner-txt">✏️ وضع التعديل</span>
+      <button class="edit-cancel" onclick="window.resetForm()">إلغاء ×</button>
+    </div>
+
+    <div class="card">
+      <div class="card-lbl">🐔 عدد الطيور</div>
+      <input class="big-input" type="number" inputmode="numeric" id="inp-count"
+             placeholder="مثال: 450" oninput="window.onFormChange()">
+    </div>
+
+    <div class="card">
+      <div class="card-lbl">⚖️ متوسط وزن الطير (كغ)</div>
+      <div class="wt-grid" id="wt-grid"></div>
+      <input class="big-input" type="number" inputmode="decimal" id="inp-wt"
+             placeholder="أو وزن مخصص..." oninput="window.onWtInput()">
+    </div>
+
+    <div class="card">
+      <div class="card-lbl">💰 السعر (دينار عراقي / كغ)</div>
+      <button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">
+        🔒 السعر المقفّل — اضغط للاستخدام
+      </button>
+      <input class="big-input" type="number" inputmode="numeric" id="inp-pr"
+             placeholder="مثال: 5500" oninput="window.onFormChange()">
+      <div class="price-hint" id="price-hint"></div>
+    </div>
+
+    <div class="card" style="padding:11px 16px">
+      <input class="note-input" type="text" id="inp-note"
+             placeholder="📝 ملاحظة اختيارية — مثال: باع أبو أحمد، دفعة المساء...">
+    </div>
+
+    <div class="result-panel" id="result-panel" style="display:none">
+      <div class="result-formula" id="r-formula"></div>
+      <div class="result-grid">
+        <div class="result-item n">
+          <div class="result-val" id="r-wt"></div>
+          <div class="result-lbl">الوزن الكلي</div>
+        </div>
+        <div class="result-item g">
+          <div class="result-val" id="r-amt"></div>
+          <div class="result-lbl">المبلغ الإجمالي</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-save" id="btn-save" onclick="window.doSave()" disabled>💾 حفظ العملية</button>
+      <button class="btn-reset" onclick="window.resetForm()">🔄</button>
+    </div>
+    <div class="hint-txt">جرّب الأرقام بحرية — فقط اضغط «حفظ» للعمليات الفعلية</div>
+  </div>
+
+  <div id="panel-history" style="display:none">
+    <div class="card">
+      <div class="card-lbl">📊 ملخص القطيع</div>
+      <div class="summary-row">
+        <span class="sum-lbl">العدد الابتدائي</span>
+        <span class="sum-val" id="s-initial" style="color:#333"></span>
+      </div>
+      <div class="summary-row">
+        <span class="sum-lbl">إجمالي المباع</span>
+        <span class="sum-val" id="s-sold" style="color:#d84315"></span>
+      </div>
+      <div class="summary-row">
+        <span class="sum-lbl">المتبقي في المزرعة</span>
+        <span class="sum-val" id="s-remaining" style="color:#1b6030"></span>
+      </div>
+      <div class="summary-row">
+        <span class="sum-lbl">إجمالي الإيراد المسجّل</span>
+        <span class="sum-val" id="s-revenue" style="color:#1565c0"></span>
+      </div>
+    </div>
+
+    <div class="estimator" id="estimator" style="display:none">
+      <div class="est-title">🔮 تقدير قيمة المتبقي عند السعر المقفّل</div>
+      <div class="est-desc" id="est-desc"></div>
+      <div class="est-val"  id="est-val"></div>
+    </div>
+
+    <div class="history-hdr" id="history-hdr"></div>
+    <div id="sales-list"></div>
+  </div>
+
+  <div id="panel-settings" style="display:none">
+    <div class="card">
+      <div class="card-lbl">🐔 إعداد القطيع</div>
+      <p class="settings-desc">العدد الكلي الابتدائي — يشمل المباع والكات وما تبقى في المزرعة</p>
+      <input class="big-input" type="number" inputmode="numeric" id="inp-flock"
+             oninput="window.saveFlock(this.value)">
+    </div>
+
+    <div class="card">
+      <div class="card-lbl">🔒 تقفيل السعر الافتراضي</div>
+      <p class="settings-desc">يملأ حقل السعر تلقائياً عند كل إدخال جديد — ويمكن تجاوزه عند الحاجة</p>
+      <input class="big-input" type="number" inputmode="numeric" id="inp-locked"
+             placeholder="أدخل السعر د.ع/كغ..." oninput="window.saveLockedPrice(this.value)">
+      <div class="locked-ok" id="locked-ok" style="display:none"></div>
+    </div>
+
+    <div class="danger-zone">
+      <div class="danger-title">⚠️ منطقة الخطر</div>
+      <button class="btn-danger" onclick="window.clearAll()">🗑️ حذف جميع سجلات البيع</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  // 1. استيراد دوال Firebase الحديثة
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+  // 2. إعدادات مشروع Firebase الخاصة بك بالكامل
+  const firebaseConfig = {
+    apiKey: "AIzaSyCQkqk-ZKTr78yhOqskDS7VabxxI_Uh8Po",
+    authDomain: "dajaj-379a2.firebaseapp.com",
+    databaseURL: "https://dajaj-379a2-default-rtdb.firebaseio.com", // سطر قاعدة البيانات اللحظية
+    projectId: "dajaj-379a2",
+    storageBucket: "dajaj-379a2.firebasestorage.app",
+    messagingSenderId: "813168612255",
+    appId: "1:813168612255:web:b6397437ebc3159ebce3aa"
+  };
+
+  // تهيئة Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // ══════════════════════════════════════
+  //  STATE (حالة التطبيق)
+  // ══════════════════════════════════════
+  const WEIGHTS = [1.3, 1.5, 1.8, 2.0, 2.5, 3.0];
+  let flock   = { initial: 17000 };
+  let sales   = [];
+  let cfg     = { lockedPrice: '' };
+  let editId  = null;
+  let confirmDelId = null;
+  let selWt   = '';
+
+  // ══════════════════════════════════════
+  //  FIREBASE SYNC (مزامنة البيانات)
+  // ══════════════════════════════════════
+  function saveToFirebase(key, val) {
+    set(ref(db, 'farmData/' + key), val);
+  }
+
+  // الاستماع اللحظي للتغييرات من فايربيز
+  onValue(ref(db, 'farmData'), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      flock = data.flock || { initial: 17000 };
+      sales = data.sales || [];
+      cfg   = data.cfg || { lockedPrice: '' };
+    } else {
+      flock = { initial: 17000 };
+      sales = [];
+      cfg   = { lockedPrice: '' };
+    }
+
+    // تحديث الواجهة فور وصول البيانات
+    updateHeader();
+    renderWtBtns();
+    refreshLockedBtn();
+    renderHistory();
+    renderSettings();
+  });
+
+  // ══════════════════════════════════════
+  //  HELPERS (دوال مساعدة)
+  // ══════════════════════════════════════
+  function pN(s) { return parseFloat(String(s ?? '').replace(/[,،\s]/g,'')) || 0; }
+  function fmt(n) {
+    const v = Math.round(+n || 0);
+    if (v >= 1e9) return (v/1e9).toFixed(1).replace(/\.0$/,'') + ' مليار';
+    if (v >= 1e6) return (v/1e6).toFixed(1).replace(/\.0$/,'') + ' مليون';
+    return v.toLocaleString('ar-IQ');
+  }
+  function todayStr() { return new Date().toLocaleDateString('ar', { year:'numeric', month:'long', day:'numeric' }); }
+  function derived() {
+    const sold = sales.reduce((a,s) => a + s.count, 0);
+    return { sold, remaining: flock.initial - sold, revenue: sales.reduce((a,s) => a + s.total, 0) };
+  }
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2200);
+  }
+
+  // ══════════════════════════════════════
+  //  UI LOGIC
+  // ══════════════════════════════════════
+  function switchTab(tab) {
+    ['entry','history','settings'].forEach(t => {
+      document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
+      document.getElementById('tab-'   + t).classList.toggle('active', t === tab);
+    });
+    if (tab === 'history')  renderHistory();
+    if (tab === 'settings') renderSettings();
+  }
+
+  function updateHeader() {
+    const d = derived();
+    document.getElementById('h-initial').textContent   = flock.initial.toLocaleString('ar-IQ');
+    document.getElementById('h-sold').textContent      = d.sold.toLocaleString('ar-IQ');
+    document.getElementById('h-remaining').textContent = d.remaining.toLocaleString('ar-IQ');
+    document.getElementById('h-revenue').textContent   = fmt(d.revenue);
+  }
+
+  function renderWtBtns() {
+    document.getElementById('wt-grid').innerHTML = WEIGHTS.map(w =>
+      `<button class="wt-btn${selWt === String(w) ? ' active' : ''}" onclick="window.pickWt('${w}')">${w} كغ</button>`
+    ).join('');
+  }
+
+  function pickWt(w) { selWt = String(w); document.getElementById('inp-wt').value = w; renderWtBtns(); onFormChange(); }
+  function onWtInput() { selWt = document.getElementById('inp-wt').value; renderWtBtns(); onFormChange(); }
+
+  function onFormChange() {
+    const cn = pN(document.getElementById('inp-count').value);
+    const wn = pN(document.getElementById('inp-wt').value);
+    const pn = pN(document.getElementById('inp-pr').value);
+
+    document.getElementById('price-hint').textContent = pn > 0 ? `= ${fmt(pn)} دينار عراقي لكل كيلوغرام` : '';
+    const lb = document.getElementById('locked-btn');
+    if (lb.style.display !== 'none') lb.classList.toggle('used', String(pN(cfg.lockedPrice)) === String(pn) && pn > 0);
+
+    const canCalc = cn > 0 && wn > 0 && pn > 0;
+    document.getElementById('btn-save').disabled = !canCalc;
+
+    const rp = document.getElementById('result-panel');
+    if (canCalc) {
+      const totWt  = cn * wn;
+      const totAmt = totWt * pn;
+      rp.style.display = '';
+      document.getElementById('r-formula').textContent = `${cn.toLocaleString('ar-IQ')} طير × ${wn} كغ × ${fmt(pn)} د/كغ`;
+      document.getElementById('r-wt').textContent  = Math.round(totWt).toLocaleString('ar-IQ') + ' كغ';
+      document.getElementById('r-amt').textContent = fmt(totAmt) + ' د.ع';
+    } else {
+      rp.style.display = 'none';
+    }
+  }
+
+  function useLocked() {
+    const lp = cfg.lockedPrice;
+    if (lp) { document.getElementById('inp-pr').value = lp; onFormChange(); }
+  }
+
+  function resetForm() {
+    editId = null; selWt = '';
+    document.getElementById('inp-count').value = '';
+    document.getElementById('inp-wt').value    = '';
+    document.getElementById('inp-note').value  = '';
+    document.getElementById('inp-pr').value    = cfg.lockedPrice || '';
+    document.getElementById('edit-banner').style.display = 'none';
+    document.getElementById('btn-save').textContent = '💾 حفظ العملية';
+    renderWtBtns();
+    onFormChange();
+  }
+
+  function doSave() {
+    const cn = pN(document.getElementById('inp-count').value);
+    const wn = pN(document.getElementById('inp-wt').value);
+    const pn = pN(document.getElementById('inp-pr').value);
+    if (!cn || !wn || !pn) return;
+
+    const totWt = cn * wn;
+    const sale  = {
+      id:    editId || Date.now().toString(),
+      date:  todayStr(),
+      count: cn, avgWt: wn, price: pn,
+      totWt, total: totWt * pn,
+      note:  document.getElementById('inp-note').value.trim()
+    };
+
+    if (editId) {
+      sales = sales.map(s => s.id === editId ? sale : s);
+      toast('✅ تم حفظ التعديل');
+    } else {
+      sales.push(sale);
+      toast('✅ تم حفظ العملية');
+    }
+    
+    saveToFirebase('sales', sales); // إرسال التحديث لفايربيز
+    resetForm();
+    switchTab('history');
+  }
+
+  function renderHistory() {
+    const d = derived();
+    document.getElementById('s-initial').textContent   = flock.initial.toLocaleString('ar-IQ') + ' طير';
+    document.getElementById('s-sold').textContent      = d.sold.toLocaleString('ar-IQ') + ' طير';
+    document.getElementById('s-remaining').textContent = d.remaining.toLocaleString('ar-IQ') + ' طير';
+    document.getElementById('s-revenue').textContent   = fmt(d.revenue) + ' د.ع';
+
+    const lp = pN(cfg.lockedPrice);
+    const eb = document.getElementById('estimator');
+    if (d.remaining > 0 && lp > 0) {
+      eb.style.display = '';
+      document.getElementById('est-desc').textContent = `المتبقي: ${d.remaining.toLocaleString('ar-IQ')} طير — بمتوسط وزن 1.8 كغ على ${fmt(lp)} د/كغ:`;
+      document.getElementById('est-val').textContent = '≈ ' + fmt(d.remaining * 1.8 * lp) + ' دينار';
+    } else { eb.style.display = 'none'; }
+
+    document.getElementById('history-hdr').textContent = `عمليات البيع (${sales.length})`;
+    const list = document.getElementById('sales-list');
+    if (sales.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-txt">لا توجد عمليات محفوظة</div><div class="empty-sub">اذهب لتبويب الإدخال وابدأ التسجيل</div></div>`;
+      return;
+    }
+
+    list.innerHTML = [...sales].reverse().map(sale => {
+      if (confirmDelId === sale.id) {
+        return `<div class="sale-card"><div class="confirm-del-box"><div class="confirm-del-txt">⚠️ حذف هذه العملية نهائياً؟</div><div class="confirm-row"><button class="btn-yes" onclick="window.doDelete('${sale.id}')">نعم، احذف</button><button class="btn-no" onclick="window.cancelDel()">إلغاء</button></div></div></div>`;
+      }
+      return `<div class="sale-card"><div class="sale-top"><div><span class="sale-count">${sale.count.toLocaleString('ar-IQ')} طير</span><span class="sale-date">${sale.date}</span></div><div class="sale-actions"><button class="btn-edit" onclick="window.startEdit('${sale.id}')">✏️ تعديل</button><button class="btn-del" onclick="window.askDel('${sale.id}')">🗑️ حذف</button></div></div><div class="sale-grid"><div class="sale-cell"><div class="sc-val">${sale.avgWt} كغ</div><div class="sc-lbl">الوزن/طير</div></div><div class="sale-cell"><div class="sc-val">${fmt(sale.price)}</div><div class="sc-lbl">السعر/كغ</div></div><div class="sale-cell hi"><div class="sc-val">${fmt(sale.total)} د</div><div class="sc-lbl">الإجمالي</div></div></div>${sale.note ? `<div class="sale-note">📝 ${sale.note}</div>` : ''}</div>`;
+    }).join('');
+  }
+
+  function startEdit(id) {
+    const sale = sales.find(s => s.id === id);
+    if (!sale) return;
+    editId = id; selWt = String(sale.avgWt);
+    document.getElementById('inp-count').value = sale.count;
+    document.getElementById('inp-wt').value    = sale.avgWt;
+    document.getElementById('inp-pr').value    = sale.price;
+    document.getElementById('inp-note').value  = sale.note || '';
+    document.getElementById('edit-banner').style.display = 'flex';
+    document.getElementById('btn-save').textContent = '💾 حفظ التعديل';
+    renderWtBtns();
+    onFormChange();
+    switchTab('entry');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function askDel(id)  { confirmDelId = id; renderHistory(); }
+  function cancelDel() { confirmDelId = null; renderHistory(); }
+
+  function doDelete(id) {
+    sales = sales.filter(s => s.id !== id);
+    saveToFirebase('sales', sales); // تحديث فايربيز
+    confirmDelId = null;
+    toast('🗑️ تم حذف العملية');
+  }
+
+  function renderSettings() {
+    if(document.activeElement.id !== 'inp-flock') document.getElementById('inp-flock').value  = flock.initial || '';
+    if(document.activeElement.id !== 'inp-locked') document.getElementById('inp-locked').value = cfg.lockedPrice || '';
+    refreshLockedOk();
+  }
+
+  function saveFlock(v) {
+    flock.initial = pN(v) || 0;
+    saveToFirebase('flock', flock);
+  }
+
+  function saveLockedPrice(v) {
+    cfg.lockedPrice = pN(v) || '';
+    saveToFirebase('cfg', cfg);
+    if (cfg.lockedPrice && !editId) document.getElementById('inp-pr').value = cfg.lockedPrice;
+    onFormChange();
+  }
+
+  function refreshLockedOk() {
+    const lp = pN(cfg.lockedPrice);
+    const el = document.getElementById('locked-ok');
+    if (lp > 0) { el.style.display=''; el.textContent = `✅ السعر المقفّل: ${fmt(lp)} دينار/كغ`; }
+    else { el.style.display='none'; }
+  }
+
+  function refreshLockedBtn() {
+    const lb = document.getElementById('locked-btn');
+    const lp = cfg.lockedPrice;
+    if (lp) { lb.style.display = ''; lb.textContent = `🔒 السعر المقفّل: ${fmt(lp)} د.ع / كغ — اضغط للاستخدام`; } 
+    else { lb.style.display = 'none'; }
+  }
+
+  function clearAll() {
+    if (!confirm('هل أنت متأكد من حذف جميع عمليات البيع المسجّلة؟\nلا يمكن التراجع عن هذا الإجراء.')) return;
+    sales = [];
+    saveToFirebase('sales', sales); // مسح من فايربيز
+    toast('🗑️ تم حذف جميع السجلات');
+  }
+
+  // ══════════════════════════════════════
+  //  Expose functions to Global Window 
+  // ══════════════════════════════════════
+  window.switchTab = switchTab;
+  window.pickWt = pickWt;
+  window.onWtInput = onWtInput;
+  window.onFormChange = onFormChange;
+  window.useLocked = useLocked;
+  window.resetForm = resetForm;
+  window.doSave = doSave;
+  window.startEdit = startEdit;
+  window.askDel = askDel;
+  window.cancelDel = cancelDel;
+  window.doDelete = doDelete;
+  window.saveFlock = saveFlock;
+  window.saveLockedPrice = saveLockedPrice;
+  window.clearAll = clearAll;
+
+</script>
+</body>
+</html>

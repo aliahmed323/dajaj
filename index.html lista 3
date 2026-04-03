@@ -177,9 +177,14 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 
   <div id="panel-weighing">
     
+    <div id="w-edit-banner" class="edit-banner" style="display:none">
+      <span class="edit-banner-txt">✏️ تعديل قائمة قبان</span>
+      <button class="edit-cancel" onclick="window.cancelWeighingEdit()">إلغاء ×</button>
+    </div>
+
     <div class="card" style="background: #e4f5e9; border: 1px solid #c0dfc9;">
       <div class="card-lbl">📦 إعداد التعبئة</div>
-      <input class="fast-input" type="number" id="w-chickens-per-cage" placeholder="عدد الدجاج في القفص (مثال: 11)" value="11">
+      <input class="fast-input" type="number" id="w-chickens-per-cage" placeholder="عدد الدجاج في القفص (مثال: 11)" value="11" oninput="window.updateWeighingSummaryLive()">
     </div>
 
     <div class="card">
@@ -220,15 +225,17 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
       <button class="btn-w-clear" onclick="window.clearWeights()">مسح القائمة للبدء من جديد 🗑️</button>
 
       <div id="w-report-container" style="display: none;">
-        <div id="w-report" class="report-box"></div>
         
-        <div style="margin-top: 12px;">
-          <input class="note-input" type="text" id="w-buyer" placeholder="👤 اسم المشتري (مثال: أبو محمد)...">
+        <div style="margin-top: 15px;">
+          <input class="fast-input" style="font-size: 16px; margin-bottom: 8px; border-color: #2e9957;" type="text" inputmode="numeric" id="w-price" placeholder="💰 سعر الكيلو الواحد (اختياري)..." oninput="window.handleTyping(this, false, null); window.updateWeighingSummaryLive()">
+          <input class="note-input" type="text" id="w-buyer" placeholder="👤 اسم المشتري (مثال: أبو محمد)..." oninput="window.updateWeighingSummaryLive()">
           <input class="note-input" type="text" id="w-notes" placeholder="📝 ملاحظات إضافية...">
         </div>
 
+        <div id="w-report" class="report-box"></div>
+
         <div style="display: flex; gap: 8px; margin-top: 10px;">
-          <button class="btn-w-save" onclick="window.saveWeighingListOnly()">حفظ كقائمة 💾</button>
+          <button class="btn-w-save" id="btn-w-save" onclick="window.saveWeighingListOnly()">حفظ كقائمة 💾</button>
           <button class="btn-w-transfer" onclick="window.transferToMainEntry()">ترحيل للمبيعات 💸</button>
         </div>
       </div>
@@ -297,7 +304,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   const WEIGHTS = [1.3, 1.5, 1.8, 2.0, 2.5, 3.0];
   let flock   = { initial: 17000 };
   let sales   = [];
-  let weighingListsDB = []; // لتخزين القوائم المستقلة
+  let weighingListsDB = []; 
   let cfg     = { lockedPrice: '' };
   let editId  = null;
   let confirmDelId = null;
@@ -308,6 +315,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   let wList = [];
   let wLastCages = '';
   let wLastEmpty = '';
+  let editWeighingId = null; // تتبع الـ ID في حالة التعديل على قائمة محفوظة
 
   function saveToFirebase(key, val) { set(ref(db, 'farmData/' + key), val); }
 
@@ -381,13 +389,19 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 
     inpFull.value = ''; inpCages.value = ''; inpEmpty.value = '';
     inpFull.focus();
-    document.getElementById('w-report-container').style.display = 'none'; // إخفاء التقرير عند إضافة جديد
+    
+    // إذا كان التقرير معروضاً، قم بتحديثه مباشرة
+    if(document.getElementById('w-report-container').style.display === 'block') {
+      updateWeighingSummaryLive();
+    }
     renderWeightsList();
   }
 
   function deleteWeightRow(idx) {
     wList.splice(idx, 1);
-    document.getElementById('w-report-container').style.display = 'none'; // إخفاء التقرير لأن الأرقام تغيرت
+    if(document.getElementById('w-report-container').style.display === 'block') {
+      updateWeighingSummaryLive();
+    }
     renderWeightsList();
   }
 
@@ -414,11 +428,19 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 
   function clearWeights() {
     if(!confirm("هل تريد مسح جميع الوزنات والبدء من جديد؟")) return;
-    wList = []; wLastCages = ''; wLastEmpty = '';
+    wList = []; wLastCages = ''; wLastEmpty = ''; editWeighingId = null;
+    document.getElementById('w-edit-banner').style.display = 'none';
     document.getElementById('w-report-container').style.display = 'none';
     document.getElementById('w-full').value = ''; document.getElementById('w-cages').value = ''; document.getElementById('w-empty').value = '';
-    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = '';
+    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = ''; document.getElementById('w-price').value = '';
     renderWeightsList(); toast('🗑️ تم مسح القائمة');
+  }
+
+  function cancelWeighingEdit() {
+    editWeighingId = null;
+    document.getElementById('w-edit-banner').style.display = 'none';
+    document.getElementById('btn-w-save').textContent = 'حفظ كقائمة 💾';
+    clearWeights(); // مسح الواجهة
   }
 
   function calculateWeighingTotals() {
@@ -433,12 +455,18 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     return { cpc, totFull, totEmpty, totCages, netWeight, totalChicks, avgWt };
   }
 
-  function finalizeWeights() {
-    if (wList.length === 0) return toast('⚠️ لا توجد وزنات لتصفيتها!');
-    let t = calculateWeighingTotals();
-    if (t.cpc <= 0) return toast('⚠️ يرجى تحديد إعداد التعبئة (عدد الدجاج في القفص)');
+  // التحديث اللحظي للتقرير
+  function updateWeighingSummaryLive() {
+    if(wList.length === 0) {
+      document.getElementById('w-report').innerHTML = "لا توجد أرقام لعرضها.";
+      return;
+    }
 
-    const reportHTML = `📊 تصفية القائمة:<br>
+    let t = calculateWeighingTotals();
+    let price = pN(document.getElementById('w-price').value);
+    let totalAmt = t.netWeight * price;
+
+    let reportHTML = `📊 تصفية القائمة:<br>
 إجمالي الأقفاص: ${t.totCages} قفص<br>
 إجمالي الدجاج: ${t.totalChicks} دجاجة<br>
 الوزن المملوء الكلي: ${t.totFull.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
@@ -446,55 +474,95 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 الوزن الصافي (اللحم): ${t.netWeight.toFixed(2).replace(/\.?0+$/,'')} كغم<br>
 معدل وزن الدجاجة: ${t.avgWt.toFixed(3).replace(/\.?0+$/,'')} كغم`;
 
+    if(price > 0) {
+      reportHTML += `<br>──────────────<br>
+سعر الكيلو: ${fmt(price)} دينار<br>
+المبلغ الإجمالي: ${fmt(totalAmt)} دينار`;
+    }
+
     document.getElementById('w-report').innerHTML = reportHTML;
     document.getElementById('w-report-container').style.display = 'block';
   }
 
+  function finalizeWeights() {
+    if (wList.length === 0) return toast('⚠️ لا توجد وزنات لتصفيتها!');
+    let cpc = pN(document.getElementById('w-chickens-per-cage').value);
+    if (cpc <= 0) return toast('⚠️ يرجى تحديد إعداد التعبئة (عدد الدجاج في القفص)');
+
+    updateWeighingSummaryLive();
+    document.getElementById('w-report-container').scrollIntoView({ behavior: 'smooth' });
+  }
+
   function saveWeighingListOnly() {
+    if (wList.length === 0) return toast('⚠️ لا توجد أرقام لحفظها!');
+    
     let t = calculateWeighingTotals();
     let buyer = document.getElementById('w-buyer').value.trim() || 'بدون اسم';
     let notes = document.getElementById('w-notes').value.trim();
+    let price = pN(document.getElementById('w-price').value);
+    let totalAmt = t.netWeight * price;
 
     const newList = {
-      id: Date.now().toString(),
+      id: editWeighingId || Date.now().toString(),
       date: todayStr(),
       buyer: buyer,
       notes: notes,
+      price: price,
+      totalAmt: totalAmt,
       itemsCount: wList.length,
+      items: [...wList], // حفظ الوزنات داخلياً
       ...t
     };
 
-    weighingListsDB.push(newList);
+    if (editWeighingId) {
+      weighingListsDB = weighingListsDB.map(l => l.id === editWeighingId ? newList : l);
+      toast('✅ تم حفظ التعديلات!');
+    } else {
+      weighingListsDB.push(newList);
+      toast('✅ تم حفظ القائمة بنجاح!');
+    }
+
     saveToFirebase('weighingLists', weighingListsDB);
     
-    toast('✅ تم حفظ القائمة بنجاح!');
+    // تصفير القبان
+    editWeighingId = null;
     wList = []; wLastCages = ''; wLastEmpty = ''; renderWeightsList();
+    document.getElementById('w-edit-banner').style.display = 'none';
+    document.getElementById('btn-w-save').textContent = 'حفظ كقائمة 💾';
     document.getElementById('w-report-container').style.display = 'none';
-    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = '';
-    switchTab('saved-lists'); // الإنتقال لتبويب القوائم
+    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = ''; document.getElementById('w-price').value = '';
+    switchTab('saved-lists'); 
   }
 
   function transferToMainEntry() {
     let t = calculateWeighingTotals();
     let buyer = document.getElementById('w-buyer').value.trim();
     let notes = document.getElementById('w-notes').value.trim();
+    let price = pN(document.getElementById('w-price').value);
+
     let finalNote = `قبان (${wList.length} وزنات)`;
-    if(buyer) finalNote += ` - للمشتري: ${buyer}`;
+    if(buyer && buyer !== 'بدون اسم') finalNote += ` - للمشتري: ${buyer}`;
     if(notes) finalNote += ` - ${notes}`;
 
     setFormattedInput('inp-count', t.totalChicks, false);
     setFormattedInput('inp-total-wt', t.netWeight, true);
     setFormattedInput('inp-wt', t.avgWt, true);
+    if(price > 0) setFormattedInput('inp-pr', price, false);
     document.getElementById('inp-note').value = finalNote;
 
     lastInputMode = 'totWt'; onFormChange('totWt');
     switchTab('entry');
-    if(!document.getElementById('inp-pr').value) document.getElementById('inp-pr').focus();
+    if(!pN(document.getElementById('inp-pr').value)) document.getElementById('inp-pr').focus();
 
     toast("✅ تم إدراج الأرقام! أكمل السعر ثم اضغط حفظ");
+    
+    // تصفير القبان
+    editWeighingId = null;
     wList = []; wLastCages = ''; wLastEmpty = ''; renderWeightsList();
+    document.getElementById('w-edit-banner').style.display = 'none';
+    document.getElementById('btn-w-save').textContent = 'حفظ كقائمة 💾';
     document.getElementById('w-report-container').style.display = 'none';
-    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = '';
+    document.getElementById('w-buyer').value = ''; document.getElementById('w-notes').value = ''; document.getElementById('w-price').value = '';
   }
 
   function renderSavedLists() {
@@ -508,21 +576,55 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
       <div class="sale-card list-card">
         <div class="sale-top">
           <div><span class="sale-count">👤 ${l.buyer}</span><span class="sale-date">${l.date}</span></div>
-          <button class="btn-del" onclick="window.deleteSavedList('${l.id}')">🗑️ حذف</button>
+          <div class="sale-actions">
+            <button class="btn-edit" onclick="window.editSavedList('${l.id}')">✏️ تعديل</button>
+            <button class="btn-del" onclick="window.deleteSavedList('${l.id}')">🗑️ حذف</button>
+          </div>
         </div>
         <div class="sale-grid">
-          <div class="sale-cell"><div class="sc-val">${l.totalChicks}</div><div class="sc-lbl">دجاجة</div></div>
+          <div class="sale-cell"><div class="sc-val">${fmt(l.totalChicks)}</div><div class="sc-lbl">دجاجة</div></div>
           <div class="sale-cell"><div class="sc-val">${l.netWeight.toFixed(2)}</div><div class="sc-lbl">الوزن الصافي</div></div>
           <div class="sale-cell hi"><div class="sc-val">${l.avgWt.toFixed(3)}</div><div class="sc-lbl">المعدل</div></div>
         </div>
-        <div style="font-size:10px; color:#888; text-align:center; margin-top:5px;">(${l.itemsCount} وزنات - ${l.totCages} قفص)</div>
+        ${l.price > 0 ? `
+        <div style="background:#e4f5e9; border-radius:8px; padding:6px; margin-top:8px; text-align:center; font-size:12px; font-weight:800; color:#1e6b40;">
+          السعر: ${fmt(l.price)} د/كغ | الإجمالي: ${fmt(l.totalAmt)} د.ع
+        </div>` : ''}
+        <div style="font-size:10px; color:#888; text-align:center; margin-top:5px;">(${l.itemsCount || 0} وزنات - ${l.totCages} قفص)</div>
         ${l.notes ? `<div class="sale-note">📝 ${l.notes}</div>` : ''}
       </div>
     `).join('');
   }
 
+  function editSavedList(id) {
+    const list = weighingListsDB.find(l => l.id === id);
+    if(!list) return;
+    
+    if(!list.items || list.items.length === 0) {
+      toast('⚠️ هذه القائمة قديمة ولا تحتوي على سجل الوزنات المفرده للتعديل.');
+      return;
+    }
+
+    editWeighingId = id;
+    wList = [...list.items]; // جلب الوزنات
+    document.getElementById('w-chickens-per-cage').value = list.cpc || 11;
+    
+    renderWeightsList();
+    
+    document.getElementById('w-edit-banner').style.display = 'flex';
+    document.getElementById('btn-w-save').textContent = '💾 حفظ التعديل';
+
+    setFormattedInput('w-price', list.price, false);
+    document.getElementById('w-buyer').value = list.buyer === 'بدون اسم' ? '' : list.buyer;
+    document.getElementById('w-notes').value = list.notes || '';
+    
+    updateWeighingSummaryLive();
+    switchTab('weighing');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   function deleteSavedList(id) {
-    if(confirm('حذف هذه القائمة؟')) {
+    if(confirm('هل أنت متأكد من حذف هذه القائمة؟')) {
       weighingListsDB = weighingListsDB.filter(l => l.id !== id);
       saveToFirebase('weighingLists', weighingListsDB);
       toast('🗑️ تم حذف القائمة');
@@ -651,8 +753,8 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   }
 
   // Global exposes
-  window.switchTab = switchTab; window.pickWt = pickWt; window.handleTyping = handleTyping; window.useLocked = useLocked; window.resetForm = resetForm; window.doSave = doSave; window.startEdit = startEdit; window.doDeleteSale = doDeleteSale; window.saveFlock = saveFlock; window.saveLockedPrice = saveLockedPrice; window.clearAllSales = clearAllSales; window.deleteSavedList = deleteSavedList;
-  window.addWeightEntry = addWeightEntry; window.deleteWeightRow = deleteWeightRow; window.finalizeWeights = finalizeWeights; window.clearWeights = clearWeights; window.transferToMainEntry = transferToMainEntry; window.saveWeighingListOnly = saveWeighingListOnly;
+  window.switchTab = switchTab; window.pickWt = pickWt; window.handleTyping = handleTyping; window.useLocked = useLocked; window.resetForm = resetForm; window.doSave = doSave; window.startEdit = startEdit; window.doDeleteSale = doDeleteSale; window.saveFlock = saveFlock; window.saveLockedPrice = saveLockedPrice; window.clearAllSales = clearAllSales; window.deleteSavedList = deleteSavedList; window.editSavedList = editSavedList;
+  window.addWeightEntry = addWeightEntry; window.deleteWeightRow = deleteWeightRow; window.finalizeWeights = finalizeWeights; window.clearWeights = clearWeights; window.cancelWeighingEdit = cancelWeighingEdit; window.transferToMainEntry = transferToMainEntry; window.saveWeighingListOnly = saveWeighingListOnly; window.updateWeighingSummaryLive = updateWeighingSummaryLive;
 
 </script>
 </body>

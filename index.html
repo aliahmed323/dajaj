@@ -187,13 +187,6 @@ body {
     </div>
 
     <div class="card">
-      <div class="card-lbl">⚖️ متوسط وزن الطير (كغ)</div>
-      <div class="wt-grid" id="wt-grid"></div>
-      <input class="big-input" type="number" inputmode="decimal" id="inp-wt"
-             placeholder="أو وزن مخصص..." oninput="window.onWtInput()">
-    </div>
-
-    <div class="card">
       <div class="card-lbl">💰 السعر (دينار عراقي / كغ)</div>
       <button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">
         🔒 السعر المقفّل — اضغط للاستخدام
@@ -201,6 +194,21 @@ body {
       <input class="big-input" type="number" inputmode="numeric" id="inp-pr"
              placeholder="مثال: 5500" oninput="window.onFormChange()">
       <div class="price-hint" id="price-hint"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-lbl">⚖️ متوسط وزن الطير (كغ)</div>
+      <div class="wt-grid" id="wt-grid"></div>
+      <input class="big-input" type="number" inputmode="decimal" id="inp-wt"
+             placeholder="أدخل الوزن الذي تريده..." oninput="window.onWtInput()">
+             
+      <div style="margin-top: 15px; padding-top: 12px; border-top: 1.5px dashed #ddeee2;">
+        <div class="card-lbl" style="font-size: 11px; color: #777; margin-bottom: 8px;">
+          🪄 أو أدخل المبلغ الإجمالي لمعرفة الوزن التقريبي تلقائياً:
+        </div>
+        <input class="big-input" style="font-size: 20px; padding: 10px; background: #fff8e1; border-color: #ffe082;" type="number" inputmode="numeric" id="inp-total-guess"
+               placeholder="المبلغ الإجمالي (مثال: 4500000)" oninput="window.guessWeight()">
+      </div>
     </div>
 
     <div class="card" style="padding:11px 16px">
@@ -286,28 +294,22 @@ body {
 <div class="toast" id="toast"></div>
 
 <script type="module">
-  // 1. استيراد دوال Firebase الحديثة
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-  // 2. إعدادات مشروع Firebase الخاصة بك بالكامل
   const firebaseConfig = {
     apiKey: "AIzaSyCQkqk-ZKTr78yhOqskDS7VabxxI_Uh8Po",
     authDomain: "dajaj-379a2.firebaseapp.com",
-    databaseURL: "https://dajaj-379a2-default-rtdb.firebaseio.com", // سطر قاعدة البيانات اللحظية
+    databaseURL: "https://dajaj-379a2-default-rtdb.firebaseio.com",
     projectId: "dajaj-379a2",
     storageBucket: "dajaj-379a2.firebasestorage.app",
     messagingSenderId: "813168612255",
     appId: "1:813168612255:web:b6397437ebc3159ebce3aa"
   };
 
-  // تهيئة Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // ══════════════════════════════════════
-  //  STATE (حالة التطبيق)
-  // ══════════════════════════════════════
   const WEIGHTS = [1.3, 1.5, 1.8, 2.0, 2.5, 3.0];
   let flock   = { initial: 17000 };
   let sales   = [];
@@ -316,14 +318,10 @@ body {
   let confirmDelId = null;
   let selWt   = '';
 
-  // ══════════════════════════════════════
-  //  FIREBASE SYNC (مزامنة البيانات)
-  // ══════════════════════════════════════
   function saveToFirebase(key, val) {
     set(ref(db, 'farmData/' + key), val);
   }
 
-  // الاستماع اللحظي للتغييرات من فايربيز
   onValue(ref(db, 'farmData'), (snapshot) => {
     const data = snapshot.val();
     if (data) {
@@ -335,8 +333,6 @@ body {
       sales = [];
       cfg   = { lockedPrice: '' };
     }
-
-    // تحديث الواجهة فور وصول البيانات
     updateHeader();
     renderWtBtns();
     refreshLockedBtn();
@@ -344,9 +340,6 @@ body {
     renderSettings();
   });
 
-  // ══════════════════════════════════════
-  //  HELPERS (دوال مساعدة)
-  // ══════════════════════════════════════
   function pN(s) { return parseFloat(String(s ?? '').replace(/[,،\s]/g,'')) || 0; }
   function fmt(n) {
     const v = Math.round(+n || 0);
@@ -366,9 +359,6 @@ body {
     setTimeout(() => el.classList.remove('show'), 2200);
   }
 
-  // ══════════════════════════════════════
-  //  UI LOGIC
-  // ══════════════════════════════════════
   function switchTab(tab) {
     ['entry','history','settings'].forEach(t => {
       document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
@@ -395,6 +385,27 @@ body {
   function pickWt(w) { selWt = String(w); document.getElementById('inp-wt').value = w; renderWtBtns(); onFormChange(); }
   function onWtInput() { selWt = document.getElementById('inp-wt').value; renderWtBtns(); onFormChange(); }
 
+  // الدالة الجديدة لحساب الوزن التقريبي
+  function guessWeight() {
+    const cn = pN(document.getElementById('inp-count').value);
+    const pn = pN(document.getElementById('inp-pr').value);
+    const total = pN(document.getElementById('inp-total-guess').value);
+
+    // إذا كان العدد والسعر والمبلغ الإجمالي مكتوبين بشكل صحيح
+    if (cn > 0 && pn > 0 && total > 0) {
+      const totalWeight = total / pn;
+      const avgWeight = totalWeight / cn;
+      // نضع النتيجة في حقل الوزن (مقربة لـ 3 مراتب عشرية)
+      document.getElementById('inp-wt').value = parseFloat(avgWeight.toFixed(3));
+      selWt = ''; 
+      renderWtBtns();
+      onFormChange();
+    } else {
+      // تنبيه صامت لحين اكتمال إدخال العدد والسعر
+      onFormChange();
+    }
+  }
+
   function onFormChange() {
     const cn = pN(document.getElementById('inp-count').value);
     const wn = pN(document.getElementById('inp-wt').value);
@@ -418,17 +429,24 @@ body {
     } else {
       rp.style.display = 'none';
     }
+    
+    // إذا قام المستخدم بتعديل أي شيء، سنحاول تحديث الوزن التقريبي إذا كان هناك مبلغ مدخل
+    const guessInput = document.getElementById('inp-total-guess');
+    if(document.activeElement !== guessInput && pN(guessInput.value) > 0) {
+        // لا نفعل شيء لتجنب اللوب اللا نهائي
+    }
   }
 
   function useLocked() {
     const lp = cfg.lockedPrice;
-    if (lp) { document.getElementById('inp-pr').value = lp; onFormChange(); }
+    if (lp) { document.getElementById('inp-pr').value = lp; onFormChange(); guessWeight(); }
   }
 
   function resetForm() {
     editId = null; selWt = '';
     document.getElementById('inp-count').value = '';
     document.getElementById('inp-wt').value    = '';
+    document.getElementById('inp-total-guess').value = ''; // تصفير حقل المبلغ التقريبي
     document.getElementById('inp-note').value  = '';
     document.getElementById('inp-pr').value    = cfg.lockedPrice || '';
     document.getElementById('edit-banner').style.display = 'none';
@@ -460,7 +478,7 @@ body {
       toast('✅ تم حفظ العملية');
     }
     
-    saveToFirebase('sales', sales); // إرسال التحديث لفايربيز
+    saveToFirebase('sales', sales); 
     resetForm();
     switchTab('history');
   }
@@ -502,6 +520,7 @@ body {
     document.getElementById('inp-count').value = sale.count;
     document.getElementById('inp-wt').value    = sale.avgWt;
     document.getElementById('inp-pr').value    = sale.price;
+    document.getElementById('inp-total-guess').value = sale.total; // نملأ الحقل تلقائياً للتعديل
     document.getElementById('inp-note').value  = sale.note || '';
     document.getElementById('edit-banner').style.display = 'flex';
     document.getElementById('btn-save').textContent = '💾 حفظ التعديل';
@@ -516,7 +535,7 @@ body {
 
   function doDelete(id) {
     sales = sales.filter(s => s.id !== id);
-    saveToFirebase('sales', sales); // تحديث فايربيز
+    saveToFirebase('sales', sales); 
     confirmDelId = null;
     toast('🗑️ تم حذف العملية');
   }
@@ -535,7 +554,10 @@ body {
   function saveLockedPrice(v) {
     cfg.lockedPrice = pN(v) || '';
     saveToFirebase('cfg', cfg);
-    if (cfg.lockedPrice && !editId) document.getElementById('inp-pr').value = cfg.lockedPrice;
+    if (cfg.lockedPrice && !editId) { 
+      document.getElementById('inp-pr').value = cfg.lockedPrice; 
+      guessWeight(); 
+    }
     onFormChange();
   }
 
@@ -556,13 +578,10 @@ body {
   function clearAll() {
     if (!confirm('هل أنت متأكد من حذف جميع عمليات البيع المسجّلة؟\nلا يمكن التراجع عن هذا الإجراء.')) return;
     sales = [];
-    saveToFirebase('sales', sales); // مسح من فايربيز
+    saveToFirebase('sales', sales);
     toast('🗑️ تم حذف جميع السجلات');
   }
 
-  // ══════════════════════════════════════
-  //  Expose functions to Global Window 
-  // ══════════════════════════════════════
   window.switchTab = switchTab;
   window.pickWt = pickWt;
   window.onWtInput = onWtInput;
@@ -577,6 +596,7 @@ body {
   window.saveFlock = saveFlock;
   window.saveLockedPrice = saveLockedPrice;
   window.clearAll = clearAll;
+  window.guessWeight = guessWeight; // تصدير دالة الحساب الجديدة
 
 </script>
 </body>

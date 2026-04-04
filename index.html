@@ -253,11 +253,11 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
       <span class="edit-banner-txt">✏️ وضع التعديل</span>
       <button class="edit-cancel" onclick="window.resetForm()">إلغاء ×</button>
     </div>
-    <div class="card"><div class="card-lbl">🐔 عدد الطيور</div><input class="big-input" type="text" inputmode="numeric" id="inp-count" oninput="window.handleTyping(this, false, null)"></div>
-    <div class="card"><div class="card-lbl">💰 السعر (دينار عراقي / كغ)</div><button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">🔒 السعر المقفّل</button><input class="big-input" type="text" inputmode="numeric" id="inp-pr" oninput="window.handleTyping(this, false, null)"><div class="price-hint" id="price-hint"></div></div>
-    <div class="card" style="background: #fffdf2; border: 1.5px solid #ffecb3;"><div class="card-lbl" style="color: #d4a000;">💵 المبلغ الإجمالي (دينار)</div><input class="big-input" style="background: #fffcf2; border-color: #ffe082;" type="text" inputmode="numeric" id="inp-total-amt" oninput="window.handleTyping(this, false, 'amt')"></div>
-    <div class="card" style="background: #f2f9ff; border: 1.5px solid #b3d4ff;"><div class="card-lbl" style="color: #0056b3;">⚖️ الوزن الكلي (كغ)</div><input class="big-input" style="background: #f2f9ff; border-color: #99c2ff;" type="text" inputmode="decimal" id="inp-total-wt" oninput="window.handleTyping(this, true, 'totWt')"></div>
-    <div class="card"><div class="card-lbl">🐥 متوسط وزن الطير الواحد (كغ)</div><div class="wt-grid" id="wt-grid"></div><input class="big-input" type="text" inputmode="decimal" id="inp-wt" oninput="window.handleTyping(this, true, 'avg')"></div>
+    <div class="card"><div class="card-lbl">🐔 عدد الطيور</div><input class="big-input" type="text" inputmode="numeric" id="inp-count" placeholder="مثال: 450" oninput="window.handleTyping(this, false, null)"></div>
+    <div class="card"><div class="card-lbl">💰 السعر (دينار عراقي / كغ)</div><button class="locked-btn" id="locked-btn" onclick="window.useLocked()" style="display:none">🔒 السعر المقفّل</button><input class="big-input" type="text" inputmode="numeric" id="inp-pr" placeholder="مثال: 5,500" oninput="window.handleTyping(this, false, null)"><div class="price-hint" id="price-hint"></div></div>
+    <div class="card" style="background: #fffdf2; border: 1.5px solid #ffecb3;"><div class="card-lbl" style="color: #d4a000;">💵 المبلغ الإجمالي (دينار)</div><input class="big-input" style="background: #fffcf2; border-color: #ffe082;" type="text" inputmode="numeric" id="inp-total-amt" placeholder="مثال: 4,500,000" oninput="window.handleTyping(this, false, 'amt')"></div>
+    <div class="card" style="background: #f2f9ff; border: 1.5px solid #b3d4ff;"><div class="card-lbl" style="color: #0056b3;">⚖️ الوزن الكلي (كغ)</div><input class="big-input" style="background: #f2f9ff; border-color: #99c2ff;" type="text" inputmode="decimal" id="inp-total-wt" placeholder="مثال: 150" oninput="window.handleTyping(this, true, 'totWt')"></div>
+    <div class="card"><div class="card-lbl">🐥 متوسط وزن الطير الواحد (كغ)</div><div class="wt-grid" id="wt-grid"></div><input class="big-input" type="text" inputmode="decimal" id="inp-wt" placeholder="وزن الطير (مثال: 1.8)..." oninput="window.handleTyping(this, true, 'avg')"></div>
     <div class="card" style="padding:11px 16px"><input class="note-input" type="text" id="inp-note" placeholder="📝 ملاحظة للبيعة..."></div>
     <div class="result-panel" id="result-panel" style="display:none"><div class="result-formula" id="r-formula"></div><div class="result-grid"><div class="result-item n"><div class="result-val" id="r-wt"></div><div class="result-lbl">الوزن المحتسب</div></div><div class="result-item g"><div class="result-val" id="r-amt"></div><div class="result-lbl">المبلغ المحتسب</div></div></div></div>
     <div class="btn-row"><button class="btn-save" id="btn-save" onclick="window.doSave()" disabled>💾 حفظ العملية</button><button class="btn-reset" onclick="window.resetForm()">🔄</button></div>
@@ -276,8 +276,8 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   </div>
 
   <div id="panel-settings" style="display:none">
-    <div class="card"><div class="card-lbl">🐔 إعداد القطيع</div><input class="big-input" type="text" inputmode="numeric" id="inp-flock" oninput="window.saveFlock(this.value); window.handleTyping(this, false, null)"></div>
-    <div class="card"><div class="card-lbl">🔒 تقفيل السعر الافتراضي</div><input class="big-input" type="text" inputmode="numeric" id="inp-locked" oninput="window.saveLockedPrice(this.value); window.handleTyping(this, false, null)"><div class="locked-ok" id="locked-ok" style="display:none"></div></div>
+    <div class="card"><div class="card-lbl">🐔 إعداد القطيع</div><input class="big-input" type="text" inputmode="numeric" id="inp-flock" placeholder="مثال: 17,000" oninput="window.saveFlock(this.value); window.handleTyping(this, false, null)"></div>
+    <div class="card"><div class="card-lbl">🔒 تقفيل السعر الافتراضي</div><input class="big-input" type="text" inputmode="numeric" id="inp-locked" placeholder="أدخل السعر د.ع/كغ..." oninput="window.saveLockedPrice(this.value); window.handleTyping(this, false, null)"><div class="locked-ok" id="locked-ok" style="display:none"></div></div>
     <div class="danger-zone"><div class="danger-title">⚠️ منطقة الخطر</div><button class="btn-danger" onclick="window.clearAllSales()">🗑️ حذف جميع المبيعات والقوائم</button></div>
   </div>
 </div>
@@ -311,11 +311,10 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   let selWt   = '';
   let lastInputMode = 'avg'; 
 
-  // متغيرات قبان التحميل
   let wList = [];
   let wLastCages = '';
   let wLastEmpty = '';
-  let editWeighingId = null; // تتبع الـ ID في حالة التعديل على قائمة محفوظة
+  let editWeighingId = null; 
 
   function saveToFirebase(key, val) { set(ref(db, 'farmData/' + key), val); }
 
@@ -361,9 +360,6 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     if (tab === 'weighing') document.getElementById('w-full').focus();
   }
 
-  // ══════════════════════════════════════
-  //  نظام قبان التحميل (Weighing System)
-  // ══════════════════════════════════════
   function addWeightEntry() {
     const inpFull = document.getElementById('w-full');
     const inpCages = document.getElementById('w-cages');
@@ -390,7 +386,6 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     inpFull.value = ''; inpCages.value = ''; inpEmpty.value = '';
     inpFull.focus();
     
-    // إذا كان التقرير معروضاً، قم بتحديثه مباشرة
     if(document.getElementById('w-report-container').style.display === 'block') {
       updateWeighingSummaryLive();
     }
@@ -440,7 +435,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     editWeighingId = null;
     document.getElementById('w-edit-banner').style.display = 'none';
     document.getElementById('btn-w-save').textContent = 'حفظ كقائمة 💾';
-    clearWeights(); // مسح الواجهة
+    clearWeights();
   }
 
   function calculateWeighingTotals() {
@@ -455,7 +450,6 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     return { cpc, totFull, totEmpty, totCages, netWeight, totalChicks, avgWt };
   }
 
-  // التحديث اللحظي للتقرير
   function updateWeighingSummaryLive() {
     if(wList.length === 0) {
       document.getElementById('w-report').innerHTML = "لا توجد أرقام لعرضها.";
@@ -510,7 +504,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
       price: price,
       totalAmt: totalAmt,
       itemsCount: wList.length,
-      items: [...wList], // حفظ الوزنات داخلياً
+      items: [...wList],
       ...t
     };
 
@@ -524,7 +518,6 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 
     saveToFirebase('weighingLists', weighingListsDB);
     
-    // تصفير القبان
     editWeighingId = null;
     wList = []; wLastCages = ''; wLastEmpty = ''; renderWeightsList();
     document.getElementById('w-edit-banner').style.display = 'none';
@@ -556,7 +549,6 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
 
     toast("✅ تم إدراج الأرقام! أكمل السعر ثم اضغط حفظ");
     
-    // تصفير القبان
     editWeighingId = null;
     wList = []; wLastCages = ''; wLastEmpty = ''; renderWeightsList();
     document.getElementById('w-edit-banner').style.display = 'none';
@@ -606,7 +598,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     }
 
     editWeighingId = id;
-    wList = [...list.items]; // جلب الوزنات
+    wList = [...list.items]; 
     document.getElementById('w-chickens-per-cage').value = list.cpc || 11;
     
     renderWeightsList();
@@ -626,15 +618,12 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   function deleteSavedList(id) {
     if(confirm('هل أنت متأكد من حذف هذه القائمة؟')) {
       weighingListsDB = weighingListsDB.filter(l => l.id !== id);
+      renderSavedLists(); // تحديث فوري
       saveToFirebase('weighingLists', weighingListsDB);
       toast('🗑️ تم حذف القائمة');
     }
   }
 
-
-  // ══════════════════════════════════════
-  // UI & General Logic
-  // ══════════════════════════════════════
   function updateHeader() {
     const d = derived();
     document.getElementById('h-initial').textContent = fmt(flock.initial);
@@ -706,11 +695,23 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     if (!cn || !wn || !pn) return;
     const totWt = pN(document.getElementById('inp-total-wt').value) || (cn * wn);
     const sale = { id: editId || Date.now().toString(), date: todayStr(), count: cn, avgWt: wn, price: pn, totWt, total: totWt * pn, note: document.getElementById('inp-note').value.trim() };
-    if (editId) { sales = sales.map(s => s.id === editId ? sale : s); toast('✅ تم حفظ التعديل'); } else { sales.push(sale); toast('✅ تم حفظ العملية'); }
-    saveToFirebase('sales', sales); resetForm(); switchTab('history');
+    
+    if (editId) { sales = sales.map(s => s.id === editId ? sale : s); toast('✅ تم حفظ التعديل'); } 
+    else { sales.push(sale); toast('✅ تم حفظ العملية'); }
+    
+    updateHeader(); renderHistory(); // تحديث فوري للواجهة
+    saveToFirebase('sales', sales); 
+    resetForm(); switchTab('history');
   }
 
   function renderHistory() {
+    // تحديث أرقام ملخص القطيع المفقودة
+    const d = derived();
+    document.getElementById('s-initial').textContent = fmt(flock.initial);
+    document.getElementById('s-sold').textContent = fmt(d.sold);
+    document.getElementById('s-remaining').textContent = fmt(d.remaining);
+    document.getElementById('s-revenue').textContent = fmt(d.revenue);
+
     const list = document.getElementById('sales-list');
     if (sales.length === 0) { list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-txt">لا توجد مبيعات محفوظة</div></div>`; return; }
 
@@ -738,7 +739,14 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
     renderWtBtns(); onFormChange(); switchTab('entry'); window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function doDeleteSale(id) { if(confirm('حذف هذه البيعة؟')) { sales = sales.filter(s => s.id !== id); saveToFirebase('sales', sales); toast('🗑️ تم الحذف'); } }
+  function doDeleteSale(id) { 
+    if(confirm('حذف هذه البيعة؟')) { 
+      sales = sales.filter(s => s.id !== id); 
+      updateHeader(); renderHistory(); // تحديث فوري
+      saveToFirebase('sales', sales); 
+      toast('🗑️ تم الحذف'); 
+    } 
+  }
   
   function renderSettings() { if(document.activeElement.id !== 'inp-flock') setFormattedInput('inp-flock', flock.initial, false); if(document.activeElement.id !== 'inp-locked') setFormattedInput('inp-locked', cfg.lockedPrice, false); refreshLockedOk(); }
   function saveFlock(v) { flock.initial = pN(v) || 0; saveToFirebase('flock', flock); }
@@ -748,6 +756,7 @@ body { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; background: #EEF7EF; 
   function clearAllSales() { 
     if (!confirm('⚠️ تحذير: سيتم حذف جميع المبيعات وقوائم القبان نهائياً.\nهل أنت متأكد؟')) return; 
     sales = []; weighingListsDB = []; 
+    updateHeader(); renderHistory(); renderSavedLists(); // تحديث فوري
     saveToFirebase('sales', sales); saveToFirebase('weighingLists', weighingListsDB);
     toast('🗑️ تم مسح كل البيانات'); 
   }
